@@ -21,6 +21,27 @@ if (menuButton && navigation) {
 const year = document.querySelector('#current-year');
 if (year) year.textContent = String(new Date().getFullYear());
 
+const welcomeAnnouncement = document.querySelector('[data-welcome-announcement]');
+if (welcomeAnnouncement) {
+  const welcomeDismissedKey = 'murshid-welcome-dismissed-v1';
+  const dismissWelcome = welcomeAnnouncement.querySelector('[data-dismiss-welcome]');
+  let alreadyDismissed = false;
+  try {
+    alreadyDismissed = window.localStorage.getItem(welcomeDismissedKey) === '1';
+  } catch {
+    alreadyDismissed = false;
+  }
+  welcomeAnnouncement.hidden = alreadyDismissed;
+  dismissWelcome?.addEventListener('click', () => {
+    welcomeAnnouncement.hidden = true;
+    try {
+      window.localStorage.setItem(welcomeDismissedKey, '1');
+    } catch {
+      // The message still closes for this page view if storage is unavailable.
+    }
+  });
+}
+
 const downloadConfig = window.MURSHID_DOWNLOAD_CONFIG || {};
 const downloadWidget = document.querySelector('[data-download-widget]');
 
