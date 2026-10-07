@@ -21,72 +21,93 @@ if (menuButton && navigation) {
 const year = document.querySelector('#current-year');
 if (year) year.textContent = String(new Date().getFullYear());
 
-const countdown = document.querySelector('#release-countdown');
-if (countdown) {
-  const releaseAt = new Date(countdown.dataset.releaseAt).getTime();
-  const hoursNode = document.querySelector('#countdown-hours');
-  const minutesNode = document.querySelector('#countdown-minutes');
-  const secondsNode = document.querySelector('#countdown-seconds');
-  const statusNode = document.querySelector('#countdown-status');
-  const downloadLink = document.querySelector('#download-link');
-  const fallback = document.querySelector('#download-fallback');
-  const fallbackMessage = document.querySelector('#download-fallback-message');
-  const releasesApi = countdown.dataset.releasesApi;
-  const releasesPage = countdown.dataset.releasesPage;
+const downloadConfig = window.MURSHID_DOWNLOAD_CONFIG || {};
+const downloadWidget = document.querySelector('[data-download-widget]');
+
+if (downloadWidget) {
+  const releaseAt = Date.parse(downloadConfig.availableAt || '');
+  const rawDriveUrl = typeof downloadConfig.googleDriveUrl === 'string'
+    ? downloadConfig.googleDriveUrl.trim()
+    : '';
+  const hoursNode = downloadWidget.querySelector('[data-hours]');
+  const minutesNode = downloadWidget.querySelector('[data-minutes]');
+  const secondsNode = downloadWidget.querySelector('[data-seconds]');
+  const countdownClock = downloadWidget.querySelector('[data-countdown-clock]');
+  const statusNode = downloadWidget.querySelector('[data-download-status]');
+  const pendingNode = downloadWidget.querySelector('[data-download-pending]');
+  const linkField = downloadWidget.querySelector('[data-drive-url-field]');
+  const copyButtons = [...downloadWidget.querySelectorAll('[data-copy-download-link]')];
+  const openLinks = [...downloadWidget.querySelectorAll('[data-open-drive]')];
   const digits = new Intl.NumberFormat('ar-EG', { minimumIntegerDigits: 2, useGrouping: false });
-  let releaseCheckStarted = false;
   let timer = null;
+  let driveUrl = '';
 
-  function showNoRelease(message) {
-    if (statusNode) statusNode.textContent = '';
-    if (downloadLink) downloadLink.hidden = true;
-    if (fallbackMessage && message) fallbackMessage.textContent = message;
-    if (fallback) fallback.hidden = false;
+  try {
+    const candidate = new URL(rawDriveUrl);
+    if (candidate.protocol === 'https:' && ['drive.google.com', 'docs.google.com'].includes(candidate.hostname)) {
+      driveUrl = candidate.href;
+    }
+  } catch {
+    driveUrl = '';
   }
 
-  async function revealPublishedApk() {
-    if (releaseCheckStarted) return;
-    releaseCheckStarted = true;
-    if (statusNode) statusNode.textContent = 'العدّاد خلص؛ بنتأكد إن ملف التحميل الرسمي موجود على GitHub.';
+  function setUnavailable(message, status) {
+    if (linkField) {
+      linkField.value = '';
+      linkField.disabled = true;
+    }
+    copyButtons.forEach((button) => { button.disabled = true; });
+    openLinks.forEach((link) => { link.hidden = true; });
+    if (pendingNode) {
+      pendingNode.textContent = message;
+      pendingNode.hidden = false;
+    }
+    if (statusNode) statusNode.textContent = status;
+  }
 
+  function enableDriveLink() {
+    if (!driveUrl) {
+      setUnavailable(
+        'العدّاد خلص، بس ملف APK لسه مش مرفوع على Google Drive. حقل النسخ هيتفعل لما الرابط الرسمي يبقى جاهز ومتاح للعامة.',
+        'التحميل لسه مش متاح؛ ما فيش رابط رسمي للملف لحد دلوقتي.'
+      );
+      return;
+    }
+
+    if (linkField) {
+      linkField.value = driveUrl;
+      linkField.disabled = false;
+    }
+    copyButtons.forEach((button) => { button.disabled = false; });
+    openLinks.forEach((link) => {
+      link.href = driveUrl;
+      link.hidden = false;
+    });
+    if (pendingNode) pendingNode.hidden = true;
+    if (statusNode) statusNode.textContent = 'رابط Google Drive الرسمي بقى جاهز؛ افتحه أو انسخه والصقه في Chrome.';
+  }
+
+  async function copyDriveLink() {
+    if (!driveUrl || Date.now() < releaseAt) return;
     try {
-      const response = await fetch(releasesApi, {
-        headers: { Accept: 'application/vnd.github+json' },
-        cache: 'no-store',
-      });
-      if (!response.ok) throw new Error('GitHub release unavailable');
-      const release = await response.json();
-      const apk = Array.isArray(release.assets)
-        ? release.assets.find((asset) => typeof asset.name === 'string' && asset.name.toLowerCase().endsWith('.apk'))
-        : null;
-
-      if (!apk || typeof apk.browser_download_url !== 'string') {
-        showNoRelease('العدّاد خلص، بس ملف APK الرسمي لسه ما اترفعش على GitHub. هنضيف لينك التحميل هنا أول ما يبقى جاهز.');
-        return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(driveUrl);
+      } else {
+        linkField?.focus();
+        linkField?.select();
+        if (!document.execCommand || !document.execCommand('copy')) throw new Error('Clipboard unavailable');
       }
-
-      const downloadUrl = new URL(apk.browser_download_url);
-      if (downloadUrl.protocol !== 'https:' || !['github.com', 'www.github.com'].includes(downloadUrl.hostname)) {
-        showNoRelease('ظهر إصدار، بس رابط التحميل مش من GitHub الرسمي. مش هنعرِض لينك غير موثوق.');
-        return;
-      }
-
-      if (downloadLink) {
-        downloadLink.href = downloadUrl.href;
-        downloadLink.hidden = false;
-      }
-      if (statusNode) statusNode.textContent = 'أول نسخة بقت جاهزة على GitHub — دوس على الزر عشان تحمّلها.';
+      if (statusNode) statusNode.textContent = 'اتنسخ الرابط. افتح Chrome والصقه في شريط العنوان، وبعدها اضغط انتقال.';
     } catch {
-      showNoRelease('العدّاد خلص، لكن مش قادرين نتحقق من GitHub دلوقتي. جرّب تفتح صفحة الإصدارات الرسمية بعد شوية.');
-    }
-
-    if (fallback) {
-      const releaseAnchor = fallback.querySelector('a');
-      if (releaseAnchor && releasesPage) releaseAnchor.href = releasesPage;
+      linkField?.focus();
+      linkField?.select();
+      if (statusNode) statusNode.textContent = 'ما قدرناش ننسخ تلقائيًا؛ حدّد الرابط الظاهر وانسخه يدويًا.';
     }
   }
 
-  function renderCountdown() {
+  copyButtons.forEach((button) => button.addEventListener('click', copyDriveLink));
+
+  function renderDownloadState() {
     const secondsRemaining = Math.max(0, Math.floor((releaseAt - Date.now()) / 1000));
     const hours = Math.floor(secondsRemaining / 3600);
     const minutes = Math.floor((secondsRemaining % 3600) / 60);
@@ -98,14 +119,20 @@ if (countdown) {
 
     if (secondsRemaining === 0) {
       if (timer) window.clearInterval(timer);
-      revealPublishedApk();
+      enableDriveLink();
+    } else {
+      setUnavailable(
+        'الملف لسه مش موجود على Drive؛ الرابط وزر النسخ هيتفعلوا بعد انتهاء العدّاد ورفع الملف الرسمي.',
+        'رابط التحميل هيتاح بعد انتهاء العدّاد ورفع الملف على Google Drive.'
+      );
     }
   }
 
-  if (Number.isFinite(releaseAt)) {
-    renderCountdown();
-    if (releaseAt > Date.now()) timer = window.setInterval(renderCountdown, 1000);
+  if (!Number.isFinite(releaseAt)) {
+    if (countdownClock) countdownClock.hidden = true;
+    setUnavailable('الرابط الرسمي هيتضاف هنا بعد رفع ملف APK على Google Drive.', 'موعد الإتاحة مش متاح دلوقتي.');
   } else {
-    showNoRelease('موعد العدّاد مش مضبوط دلوقتي. هنعلن رابط التحميل الرسمي هنا لما يبقى جاهز.');
+    renderDownloadState();
+    if (releaseAt > Date.now()) timer = window.setInterval(renderDownloadState, 1000);
   }
 }
