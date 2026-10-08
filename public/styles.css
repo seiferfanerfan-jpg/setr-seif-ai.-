@@ -67,3 +67,19 @@ body{font-family:var(--sans);font-size:16px;line-height:1.95}
 .download-card .queue-start,.download-card .queue-download{margin-top:4px}
 .queue-noscript{color:#e7bd78;font-size:12px}
 @media(max-width:680px){.download-queue{align-items:stretch;flex-direction:column}.queue-start,.queue-download{width:100%}.queue-status{font-size:13px}.download-card .queue-start,.download-card .queue-download{width:100%}}
+
+
+/* توضيح Google Drive: نبرة هادئة مع شفافية بشأن نتيجة الفحص */
+.download-assurance{display:flex;align-items:flex-start;gap:13px;width:100%;margin-top:17px;padding:16px 17px;border:1px solid rgba(85,228,207,.23);border-radius:16px;background:linear-gradient(120deg,rgba(85,228,207,.09),rgba(255,255,255,.025))}
+.assurance-mark{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border:1px solid rgba(85,228,207,.28);border-radius:11px;background:rgba(85,228,207,.13);color:#70ecd9;font-family:Arial,sans-serif;font-size:17px;font-weight:800}
+.assurance-copy{min-width:0;flex:1}
+.download-assurance .section-kicker{margin:0 0 3px;color:#72e0d0;font-size:9px;letter-spacing:.04em}
+.download-assurance h2,.download-assurance h3{margin:0 0 5px;color:#edf8f8;font-size:14px;font-weight:700;line-height:1.7}
+.download-assurance p:last-child{margin:0;color:#bccbd1;font-size:10px;line-height:1.9}
+.safety-notice{border-color:rgba(85,228,207,.19);background:rgba(49,208,188,.045)}
+.safety-notice .policy-mark{background:rgba(85,228,207,.12);color:#71dfd0}
+.safety-notice .section-kicker{color:#72e0d0}
+.safety-notice h2{color:#eaf6f6}
+.safety-notice p:not(.section-kicker){color:#b8c8cf}
+.update-footnote>span{color:#72e0d0}
+@media(max-width:680px){.download-assurance{gap:10px;margin-top:14px;padding:14px 12px}.assurance-mark{flex-basis:30px;width:30px;height:30px}.download-assurance h2,.download-assurance h3{font-size:12px}.download-assurance p:last-child{font-size:9px}}
