@@ -43,117 +43,63 @@ if (welcomeAnnouncement) {
 }
 
 const downloadConfig = window.MURSHID_DOWNLOAD_CONFIG || {};
-const downloadWidget = document.querySelector('[data-download-widget]');
+const fileId = typeof downloadConfig.googleDriveFileId === 'string'
+  ? downloadConfig.googleDriveFileId.trim()
+  : '';
+const downloadUrl = fileId && /^[\w-]+$/.test(fileId)
+  ? `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`
+  : '';
 
-if (downloadWidget) {
-  const releaseAt = Date.parse(downloadConfig.availableAt || '');
-  const rawDriveUrl = typeof downloadConfig.googleDriveUrl === 'string'
-    ? downloadConfig.googleDriveUrl.trim()
-    : '';
-  const hoursNode = downloadWidget.querySelector('[data-hours]');
-  const minutesNode = downloadWidget.querySelector('[data-minutes]');
-  const secondsNode = downloadWidget.querySelector('[data-seconds]');
-  const countdownClock = downloadWidget.querySelector('[data-countdown-clock]');
-  const statusNode = downloadWidget.querySelector('[data-download-status]');
-  const pendingNode = downloadWidget.querySelector('[data-download-pending]');
-  const linkField = downloadWidget.querySelector('[data-drive-url-field]');
-  const copyButtons = [...downloadWidget.querySelectorAll('[data-copy-download-link]')];
-  const openLinks = [...downloadWidget.querySelectorAll('[data-open-drive]')];
-  const digits = new Intl.NumberFormat('ar-EG', { minimumIntegerDigits: 2, useGrouping: false });
-  let timer = null;
-  let driveUrl = '';
+document.querySelectorAll('[data-download-queue]').forEach((queue) => {
+  const startButton = queue.querySelector('[data-queue-start]');
+  const status = queue.querySelector('[data-queue-status]');
+  const downloadButton = queue.querySelector('[data-queue-download]');
+  if (!startButton || !status || !downloadButton || !downloadUrl) return;
 
-  try {
-    const candidate = new URL(rawDriveUrl);
-    if (candidate.protocol === 'https:' && ['drive.google.com', 'docs.google.com'].includes(candidate.hostname)) {
-      driveUrl = candidate.href;
-    }
-  } catch {
-    driveUrl = '';
-  }
+  downloadButton.href = downloadUrl;
+  startButton.addEventListener('click', () => {
+    if (startButton.disabled) return;
+    startButton.disabled = true;
+    startButton.hidden = true;
+    status.textContent = 'نأسف لك، تم وضعك في طابور الانتظار.';
+    status.hidden = false;
 
-  function setUnavailable(message, status) {
-    if (linkField) {
-      linkField.value = '';
-      linkField.disabled = true;
-    }
-    copyButtons.forEach((button) => { button.disabled = true; });
-    openLinks.forEach((link) => { link.hidden = true; });
-    if (pendingNode) {
-      pendingNode.textContent = message;
-      pendingNode.hidden = false;
-    }
-    if (statusNode) statusNode.textContent = status;
-  }
+    window.setTimeout(() => {
+      downloadButton.hidden = false;
+      status.textContent = 'أصبح بإمكانك تنزيل التطبيق الآن.';
+    }, 5000);
+  }, { once: true });
+});
 
-  function enableDriveLink() {
-    if (!driveUrl) {
-      setUnavailable(
-        'العدّاد خلص، بس ملف APK لسه مش مرفوع على Google Drive. حقل النسخ هيتفعل لما الرابط الرسمي يبقى جاهز ومتاح للعامة.',
-        'التحميل لسه مش متاح؛ ما فيش رابط رسمي للملف لحد دلوقتي.'
-      );
-      return;
-    }
-
-    if (linkField) {
-      linkField.value = driveUrl;
-      linkField.disabled = false;
-    }
-    copyButtons.forEach((button) => { button.disabled = false; });
-    openLinks.forEach((link) => {
-      link.href = driveUrl;
-      link.hidden = false;
-    });
-    if (pendingNode) pendingNode.hidden = true;
-    if (statusNode) statusNode.textContent = 'رابط Google Drive الرسمي بقى جاهز؛ افتحه أو انسخه والصقه في Chrome.';
-  }
-
-  async function copyDriveLink() {
-    if (!driveUrl || Date.now() < releaseAt) return;
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(driveUrl);
-      } else {
-        linkField?.focus();
-        linkField?.select();
-        if (!document.execCommand || !document.execCommand('copy')) throw new Error('Clipboard unavailable');
+function addVerifiedBrandMarks() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue.includes('مرشد')) return NodeFilter.FILTER_REJECT;
+      const parent = node.parentElement;
+      if (!parent || parent.closest('script,style,noscript,textarea,svg,[data-skip-verified]')) {
+        return NodeFilter.FILTER_REJECT;
       }
-      if (statusNode) statusNode.textContent = 'اتنسخ الرابط. افتح Chrome والصقه في شريط العنوان، وبعدها اضغط انتقال.';
-    } catch {
-      linkField?.focus();
-      linkField?.select();
-      if (statusNode) statusNode.textContent = 'ما قدرناش ننسخ تلقائيًا؛ حدّد الرابط الظاهر وانسخه يدويًا.';
-    }
-  }
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
 
-  copyButtons.forEach((button) => button.addEventListener('click', copyDriveLink));
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
 
-  function renderDownloadState() {
-    const secondsRemaining = Math.max(0, Math.floor((releaseAt - Date.now()) / 1000));
-    const hours = Math.floor(secondsRemaining / 3600);
-    const minutes = Math.floor((secondsRemaining % 3600) / 60);
-    const seconds = secondsRemaining % 60;
-
-    if (hoursNode) hoursNode.textContent = digits.format(hours);
-    if (minutesNode) minutesNode.textContent = digits.format(minutes);
-    if (secondsNode) secondsNode.textContent = digits.format(seconds);
-
-    if (secondsRemaining === 0) {
-      if (timer) window.clearInterval(timer);
-      enableDriveLink();
-    } else {
-      setUnavailable(
-        'الملف لسه مش موجود على Drive؛ الرابط وزر النسخ هيتفعلوا بعد انتهاء العدّاد ورفع الملف الرسمي.',
-        'رابط التحميل هيتاح بعد انتهاء العدّاد ورفع الملف على Google Drive.'
-      );
-    }
-  }
-
-  if (!Number.isFinite(releaseAt)) {
-    if (countdownClock) countdownClock.hidden = true;
-    setUnavailable('الرابط الرسمي هيتضاف هنا بعد رفع ملف APK على Google Drive.', 'موعد الإتاحة مش متاح دلوقتي.');
-  } else {
-    renderDownloadState();
-    if (releaseAt > Date.now()) timer = window.setInterval(renderDownloadState, 1000);
-  }
+  textNodes.forEach((textNode) => {
+    const fragment = document.createDocumentFragment();
+    textNode.nodeValue.split(/(مرشد)/g).forEach((part) => {
+      if (part === 'مرشد') {
+        const brand = document.createElement('span');
+        brand.className = 'verified-brand';
+        brand.textContent = part;
+        fragment.append(brand);
+      } else if (part) {
+        fragment.append(document.createTextNode(part));
+      }
+    });
+    textNode.replaceWith(fragment);
+  });
 }
+
+addVerifiedBrandMarks();

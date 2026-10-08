@@ -9,6 +9,9 @@
   <meta property="og:title" content="إزاي تحمّل مرشد؟ — الموقع الرسمي">
   <meta property="og:description" content="خطوات تنزيل ملف مرشد الرسمي من Google Drive، مع إرشادات واضحة لفحص الملف وتثبيته على Android.">
   <link rel="icon" type="image/png" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <title>إزاي تحمّل مرشد؟ — الموقع الرسمي</title>
 </head>
@@ -33,7 +36,7 @@
     <div class="welcome-copy">
       <p class="section-kicker">رسالة ترحيب</p>
       <h2 id="welcome-title">أهلًا بالصفوة</h2>
-      <p>مش هتدخلوا طابور انتظار عشان تستخدموا النسخة التجريبية أو أول نسخة من مرشد. متوقع واحدة من النسختين تبقى متاحة خلال الساعات الجاية من الرابط الرسمي، ومعاها خطوات تنزيل واضحة. تابعوا الموقع؛ اللينك هيظهر هنا أول ما الملف يجهز.</p>
+      <p>أهلًا بيك في الموقع الرسمي لمرشد. حمّل التطبيق من الرابط الرسمي واتبع خطوات التنزيل الظاهرة هنا.</p>
     </div>
     <button class="welcome-dismiss" type="button" data-dismiss-welcome>تمام، كمل</button>
   </aside>
@@ -41,40 +44,30 @@
   <main id="main" class="download-guide-main section-wrap">
     <section class="guide-hero" aria-labelledby="guide-title">
       <p class="section-kicker">شرح التنزيل خطوة بخطوة</p>
-      <h1 id="guide-title">إزاي تحمّل أول نسخة<br><span>من تطبيق مرشد؟</span></h1>
-      <p>لما ملف APK الرسمي يترفع، هتلاقي لينك Google Drive هنا. اللينك هيكون متاح لأي حد معاه الرابط؛ دلوقتي الملف لسه مش موجود، فزر النسخ والتنزيل مقفولين.</p>
+      <h1 id="guide-title">إزاي تحمّل التطبيق<br><span>من موقع مرشد؟</span></h1>
+      <p>ابدأ من زر «تحميل التطبيق». بعد اكتمال طابور الانتظار، اضغط زر التنزيل لفتح ملف APK الرسمي على Google Drive.</p>
     </section>
 
-    <section class="download-card" id="download-guide" data-download-widget aria-labelledby="drive-link-title">
+    <section class="download-card" id="download-guide" data-download-queue aria-labelledby="drive-link-title">
       <div class="download-card-topline">
         <div><p class="section-kicker">رابط التنزيل الرسمي</p><h2 id="drive-link-title">Google Drive</h2></div>
-        <span class="coming-soon-badge"><span aria-hidden="true"></span> هيتضاف بعد رفع الملف</span>
+        <span class="coming-soon-badge"><span aria-hidden="true"></span> رابط رسمي</span>
       </div>
-      <div class="guide-countdown" data-countdown-clock role="timer" aria-label="الوقت المتبقي قبل إتاحة التنزيل">
-        <div class="countdown-unit"><span data-hours>10</span><small>ساعة</small></div>
-        <span class="countdown-colon" aria-hidden="true">:</span>
-        <div class="countdown-unit"><span data-minutes>00</span><small>دقيقة</small></div>
-        <span class="countdown-colon" aria-hidden="true">:</span>
-        <div class="countdown-unit"><span data-seconds>00</span><small>ثانية</small></div>
-      </div>
-      <p class="countdown-status" data-download-status aria-live="polite">الرابط الرسمي هيتفعل بعد انتهاء العدّاد ورفع الملف على Google Drive.</p>
-      <label class="drive-url-label" for="guide-drive-url">لينك Google Drive</label>
-      <div class="drive-copy-row">
-        <input id="guide-drive-url" class="drive-url-field" data-drive-url-field type="url" placeholder="الملف لسه مش مرفوع" readonly disabled>
-        <button class="button button-primary" type="button" data-copy-download-link disabled>انسخ الرابط</button>
-      </div>
-      <a class="button button-quiet drive-open-link" data-open-drive href="#" target="_blank" rel="noopener noreferrer" hidden>افتح الملف على Google Drive <span aria-hidden="true">↗</span></a>
-      <p class="download-pending" data-download-pending>مفيش ملف APK على Drive لسه؛ حقل النسخ والتحميل هيتفعلوا لما الرابط الرسمي يبقى جاهز ومتاح للعامة.</p>
+      <p class="queue-intro">اضغط للبدء، ثم اضغط زر التنزيل الذي سيظهر لك.</p>
+      <button class="button button-primary queue-start" type="button" data-queue-start>تحميل التطبيق <span aria-hidden="true">↓</span></button>
+      <p class="queue-status" data-queue-status role="status" aria-live="polite" hidden></p>
+      <a class="button button-primary queue-download" data-queue-download href="#" hidden>اضغط لتحميل التطبيق <span aria-hidden="true">↓</span></a>
+      <noscript><p class="queue-noscript">فعّل JavaScript لبدء التنزيل من الموقع.</p></noscript>
     </section>
 
     <section class="guide-steps" aria-labelledby="steps-title">
-      <div class="guide-section-heading"><p class="section-kicker">بعد ما الرابط يتفعل</p><h2 id="steps-title">كمّل الخطوات دي.</h2></div>
+      <div class="guide-section-heading"><p class="section-kicker">بعد الضغط على زر التنزيل</p><h2 id="steps-title">كمّل الخطوات دي.</h2></div>
       <ol class="download-steps">
-        <li><span class="step-number">01</span><div><h3>انسخ الرابط</h3><p>اضغط «انسخ الرابط» بعد ما الزر يتفعل. افتح Google Chrome، واضغط على شريط العنوان أو البحث اللي فوق، والصق اللينك واضغط «انتقال» أو Enter.</p></div></li>
-        <li><span class="step-number">02</span><div><h3>نزّل الملف من Drive</h3><p>لما صفحة Google Drive تفتح، اضغط علامة التنزيل. لو ظهرت معاينة للملف، اختار «تنزيل». استنى لحد ما التنزيل يخلص قبل ما تفتح الملف.</p></div></li>
+        <li><span class="step-number">01</span><div><h3>اضغط زر التنزيل</h3><p>ابدأ من زر «تحميل التطبيق»، وبعد ظهور الزر التالي اضغط «اضغط لتحميل التطبيق» لفتح الملف من Google Drive.</p></div></li>
+        <li><span class="step-number">02</span><div><h3>أكمل التنزيل من Drive</h3><p>قد يعرض Google تحذيرًا للملف التنفيذي الذي تعذّر فحصه. اقرأ التحذير وتأكد من المصدر قبل أن تختار تنزيل الملف، وانتظر اكتمال التنزيل.</p></div></li>
         <li><span class="step-number">03</span><div><h3>افتح ملف APK على Android</h3><p>افتح الملف من إشعار التنزيل أو مجلد Downloads. لو Android طلب السماح بالتثبيت من Chrome أو مدير الملفات، اسمح للمصدر ده للتثبيت الحالي بس، وبعدها اقفل الإذن تاني.</p></div></li>
       </ol>
-      <p class="file-size-note">بحسب إفادة المطوّر، الحجم المتوقع حوالي 55 ميجابايت؛ الحجم النهائي هيبان على Google Drive بعد رفع الملف. التحميل ممكن ياخد شوية حسب سرعة الإنترنت.</p>
+      <p class="file-size-note">قد يختلف وقت التنزيل بحسب سرعة الإنترنت. راجع اسم الملف ومصدره قبل فتحه.</p>
     </section>
 
     <aside class="safety-notice" aria-labelledby="safety-title">

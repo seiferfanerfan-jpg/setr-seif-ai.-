@@ -49,3 +49,21 @@ html{background:#07131f}body{background:#07131f;color:#eaf3f5}.skip-link{backgro
 @media(max-width:920px){.screenshot-grid{grid-template-columns:1fr;gap:16px}.screenshot-card{max-width:700px;width:100%;margin-inline:auto}.screenshot-card:nth-child(2){transform:none}.screenshot-grid{padding-bottom:8px}.screenshot-note{margin-top:18px}}
 @media(max-width:680px){.app-preview-section{padding:58px 0 68px}.app-preview-heading{align-items:flex-start;flex-direction:column;gap:12px;margin-bottom:23px}.app-preview-heading h2{font-size:31px}.app-preview-heading>p{font-size:11px}.screenshot-card{grid-template-columns:minmax(112px,155px) minmax(0,1fr);gap:13px;padding:13px;border-radius:18px}.screenshot-device{max-width:155px;border-width:5px;border-radius:21px}.screenshot-label{margin-bottom:8px;font-size:9px}.screenshot-card h3{font-size:15px;margin-bottom:6px}.screenshot-card figcaption p{font-size:10px;line-height:1.7}}
 @media(max-width:390px){.screenshot-card{grid-template-columns:1fr}.screenshot-device{max-width:195px}.screenshot-card figcaption{text-align:center}}
+
+
+/* خط الرقعة وعلامات توثيق اسم العلامة */
+:root{--sans:"Aref Ruqaa","Noto Sans Arabic",Tahoma,Arial,sans-serif}
+body{font-family:var(--sans);font-size:16px;line-height:1.95}
+.hero h1,.section-heading h2,.features-heading h2,.privacy-intro h2,.faq-heading h2,.cta-inner h2,.update-main h2,.builder-copy h2,.guide-hero h1{letter-spacing:normal}
+.verified-brand{display:inline-flex;align-items:center;gap:.2em;white-space:nowrap}
+.verified-brand::after{content:"✓";display:inline-grid;place-items:center;width:.88em;height:.88em;border-radius:50%;background:#2787f5;color:#fff;font-family:Arial,sans-serif;font-size:.64em;font-weight:800;line-height:1;vertical-align:middle;flex:0 0 auto}
+
+/* طابور تنزيل التطبيق */
+.download-queue{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:23px}
+.queue-start,.queue-download{margin:0;min-height:52px;font-size:15px}
+.queue-start[disabled]{cursor:wait;opacity:.72;transform:none}
+.queue-status{flex-basis:100%;margin:0;padding:11px 14px;border:1px solid rgba(85,228,207,.25);border-radius:13px;background:rgba(85,228,207,.07);color:#d5f7f2;font-size:14px;line-height:1.8}
+.queue-intro{margin:19px 0 13px;color:#adc1ca;font-size:14px;line-height:1.9}
+.download-card .queue-start,.download-card .queue-download{margin-top:4px}
+.queue-noscript{color:#e7bd78;font-size:12px}
+@media(max-width:680px){.download-queue{align-items:stretch;flex-direction:column}.queue-start,.queue-download{width:100%}.queue-status{font-size:13px}.download-card .queue-start,.download-card .queue-download{width:100%}}
