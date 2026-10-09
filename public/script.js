@@ -50,6 +50,41 @@ const downloadUrl = fileId && /^[\w-]+$/.test(fileId)
   ? `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`
   : '';
 
+const releaseCountdown = document.querySelector('[data-release-countdown]');
+if (releaseCountdown) {
+  const deadline = Date.parse(releaseCountdown.dataset.deadline || '');
+  const hours = releaseCountdown.querySelector('[data-countdown-hours]');
+  const minutes = releaseCountdown.querySelector('[data-countdown-minutes]');
+  const seconds = releaseCountdown.querySelector('[data-countdown-seconds]');
+  const clock = releaseCountdown.querySelector('[data-countdown-clock]');
+  const expired = releaseCountdown.querySelector('[data-countdown-expired]');
+  const numberFormat = new Intl.NumberFormat('ar-EG', { useGrouping: false });
+
+  if (Number.isFinite(deadline) && hours && minutes && seconds && clock && expired) {
+    const updateCountdown = () => {
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) {
+        clock.hidden = true;
+        expired.hidden = false;
+        window.clearInterval(countdownInterval);
+        return;
+      }
+
+      const wholeSeconds = Math.floor(remaining / 1000);
+      const totalHours = Math.floor(wholeSeconds / 3600);
+      const remainingMinutes = Math.floor((wholeSeconds % 3600) / 60);
+      const remainingSeconds = wholeSeconds % 60;
+      hours.textContent = numberFormat.format(totalHours);
+      minutes.textContent = numberFormat.format(remainingMinutes).padStart(2, '٠');
+      seconds.textContent = numberFormat.format(remainingSeconds).padStart(2, '٠');
+    };
+
+    let countdownInterval;
+    updateCountdown();
+    if (Date.now() < deadline) countdownInterval = window.setInterval(updateCountdown, 1000);
+  }
+}
+
 document.querySelectorAll('[data-download-queue]').forEach((queue) => {
   const startButton = queue.querySelector('[data-queue-start]');
   const status = queue.querySelector('[data-queue-status]');

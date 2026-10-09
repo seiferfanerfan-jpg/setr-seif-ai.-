@@ -99,3 +99,19 @@ body{font-family:var(--sans);font-size:16px;line-height:1.95}
 .release-banner-copy bdi{color:#ff93a1;font-weight:800;direction:ltr}
 .release-banner-date{display:flex;align-items:center;gap:7px;white-space:nowrap;padding:10px 13px;border:1px solid rgba(255,105,126,.3);border-radius:12px;background:rgba(211,55,78,.09);color:#ff788b;font-size:12px;font-weight:800;direction:rtl}
 @media(max-width:720px){.release-banner{grid-template-columns:32px minmax(0,1fr);gap:10px;margin:12px 16px 0;padding:14px 13px}.release-banner-mark{grid-column:1;grid-row:1;width:32px;height:32px;border-radius:10px;font-size:12px}.release-banner-copy{grid-column:2;grid-row:1}.release-banner-meta{gap:7px}.release-banner-label{font-size:9px}.release-banner-window-label{font-size:8px}.release-banner-copy h2{font-size:16px}.release-banner-copy p{font-size:10px}.release-banner-date{grid-column:2;grid-row:2;width:max-content;max-width:100%;padding:8px 10px;font-size:10px}}
+
+
+/* عدّ تنازلي حقيقي حتى نهاية نافذة الإطلاق بتوقيت القاهرة */
+.release-banner{grid-template-columns:40px minmax(0,1fr) auto}
+.release-banner-date{display:flex;flex-direction:column;align-items:center;gap:3px}
+.release-banner-date-range{display:flex;align-items:center;gap:7px;white-space:nowrap;direction:rtl}
+.release-banner-date small{color:#d5a6ad;font-size:8px;font-weight:600}
+.release-countdown{grid-column:2/-1;display:flex;align-items:center;gap:12px;margin-top:1px}
+.release-countdown-label{color:#b7c4ca;font-size:10px}
+.release-countdown-clock{display:flex;align-items:center;gap:5px}
+.release-countdown-segment{min-width:50px;display:flex;align-items:baseline;justify-content:center;gap:4px;padding:5px 8px;border:1px solid rgba(255,111,132,.22);border-radius:10px;background:rgba(214,57,79,.08);color:#ff8797}
+.release-countdown-segment b{font-family:Arial,sans-serif;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.release-countdown-segment small{font-size:8px;color:#d8aab1;white-space:nowrap}
+.release-countdown-separator{color:#ff8395;font-family:Arial,sans-serif;font-size:15px;font-weight:800}
+.release-countdown-expired{grid-column:2/-1;margin:0;color:#ff8797;font-size:11px;font-weight:700}
+@media(max-width:720px){.release-countdown{grid-column:1/-1;flex-wrap:wrap;gap:7px;margin-top:3px}.release-countdown-label{font-size:9px}.release-countdown-clock{gap:3px}.release-countdown-segment{min-width:44px;padding:5px 6px;gap:3px}.release-countdown-segment b{font-size:13px}.release-countdown-segment small{font-size:7px}.release-countdown-separator{font-size:12px}.release-banner-date-range{gap:4px;font-size:10px}}
