@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar-EG" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07131f">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="لوحة الإدارة الخاصة بطلبات مفاتيح مرشد.">
+  <link rel="icon" type="image/png" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <title>لوحة Admin — مرشد</title>
+</head>
+<body class="portal-page admin-page">
+  <a class="skip-link" href="#main">انط للمحتوى</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="مرشد، الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true"><img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png" alt=""></span>
+        <span class="brand-copy"><strong>مرشد</strong><small>إدارة طلبات الوصول</small></span>
+      </a>
+      <nav class="site-nav guide-nav" aria-label="التنقل">
+        <a href="/">الرئيسية</a>
+        <a href="/access.html">بوابة الوصول</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="portal-main admin-main section-wrap" id="main">
+    <a class="portal-back" href="/" aria-label="العودة إلى الصفحة الرئيسية"><span aria-hidden="true">→</span> رجوع للموقع</a>
+    <section class="admin-shell" aria-labelledby="admin-title">
+      <div class="admin-heading">
+        <p class="section-kicker">منطقة خاصة / إدارة الطلبات</p>
+        <h1 id="admin-title">لوحة <bdi>Admin</bdi></h1>
+        <p>سجلات طلبات مفاتيح الوصول. المفتاح الكامل لا يُحفظ ولا يظهر في هذه اللوحة.</p>
+      </div>
+
+      <form class="admin-login portal-card" data-admin-login>
+        <span class="portal-card-step">دخول المسؤول</span>
+        <label class="portal-field" for="admin-password">
+          <span>كلمة مرور Admin</span>
+          <input id="admin-password" name="password" type="password" autocomplete="current-password" minlength="12" maxlength="512" required placeholder="أدخل كلمة المرور">
+        </label>
+        <button class="button button-primary portal-submit" type="submit" data-login-submit>
+          <span data-login-label>دخول آمن</span><span aria-hidden="true">←</span>
+        </button>
+        <p class="portal-message" data-admin-login-message role="status" aria-live="polite" hidden></p>
+      </form>
+
+      <section class="admin-panel portal-card" data-admin-panel aria-labelledby="records-title" hidden>
+        <div class="admin-toolbar">
+          <div><p class="section-kicker">سجل الإصدارات</p><h2 id="records-title">طلبات الوصول</h2></div>
+          <div class="admin-actions">
+            <button class="button button-quiet" type="button" data-refresh-records>تحديث</button>
+            <button class="button button-quiet admin-logout" type="button" data-admin-logout>خروج</button>
+          </div>
+        </div>
+        <p class="admin-count" data-admin-count>جاري تحميل السجلات…</p>
+        <p class="portal-message" data-admin-message role="status" aria-live="polite" hidden></p>
+        <div class="admin-table-wrap" tabindex="0" aria-label="جدول طلبات الوصول؛ مرّر أفقيًا لعرض الأعمدة الأخرى">
+          <table class="admin-table">
+            <thead><tr><th scope="col">الاسم</th><th scope="col">البريد الإلكتروني</th><th scope="col">معرّف المفتاح المقنّع</th><th scope="col">الحالة</th><th scope="col">تاريخ الطلب</th><th scope="col">إجراء</th></tr></thead>
+            <tbody data-admin-records></tbody>
+          </table>
+        </div>
+        <p class="admin-note">المفتاح الكامل يظهر للمستخدم مرة واحدة فقط. الحذف يزيل بيانات الطلب وبصمة المفتاح نهائيًا.</p>
+      </section>
+
+      <aside class="portal-boundary admin-boundary">
+        <span class="portal-boundary-mark" aria-hidden="true">i</span>
+        <p>لأمان الحساب، لا تشارك كلمة المرور. تُضبط كلمة المرور في إعدادات Vercel كمتغير بيئة سري، ولا تُحفظ هنا أو في ملفات الموقع.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="portal-footer"><a href="/">مرشد — الصفحة الرئيسية</a><a href="/access.html">بوابة الوصول</a><span>لوحة خاصة بالمسؤول</span></footer>
+  <script src="/admin.js" defer></script>
+  <script src="/script.js?v=counter-20261103" defer></script>
+</body>
+</html>
