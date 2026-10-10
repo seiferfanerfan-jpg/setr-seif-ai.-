@@ -1,3 +1,20 @@
+const pageLanguage = document.documentElement.lang.toLowerCase().startsWith('en') ? 'en' : 'ar';
+const messages = {
+  ar: {
+    openMenu: 'افتح القائمة',
+    closeMenu: 'اقفل القائمة',
+    queueWait: 'نأسف لك، تم وضعك في طابور الانتظار.',
+    queueReady: 'أصبح بإمكانك تنزيل التطبيق الآن.',
+  },
+  en: {
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    queueWait: 'Sorry, you’ve been placed in the waiting queue.',
+    queueReady: 'You can download the app now.',
+  },
+};
+const copy = messages[pageLanguage];
+
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#site-nav');
 
@@ -5,14 +22,14 @@ if (menuButton && navigation) {
   menuButton.addEventListener('click', () => {
     const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
     menuButton.setAttribute('aria-expanded', String(!isExpanded));
-    menuButton.setAttribute('aria-label', isExpanded ? 'افتح القائمة' : 'اقفل القائمة');
+    menuButton.setAttribute('aria-label', isExpanded ? copy.openMenu : copy.closeMenu);
     navigation.classList.toggle('is-open', !isExpanded);
   });
 
   navigation.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {
       menuButton.setAttribute('aria-expanded', 'false');
-      menuButton.setAttribute('aria-label', 'افتح القائمة');
+      menuButton.setAttribute('aria-label', copy.openMenu);
       navigation.classList.remove('is-open');
     });
   });
@@ -58,7 +75,9 @@ if (releaseCountdown) {
   const seconds = releaseCountdown.querySelector('[data-countdown-seconds]');
   const clock = releaseCountdown.querySelector('[data-countdown-clock]');
   const expired = releaseCountdown.querySelector('[data-countdown-expired]');
-  const numberFormat = new Intl.NumberFormat('ar-EG', { useGrouping: false });
+  const locale = pageLanguage === 'en' ? 'en-US' : 'ar-EG';
+  const zero = pageLanguage === 'en' ? '0' : '٠';
+  const numberFormat = new Intl.NumberFormat(locale, { useGrouping: false });
 
   if (Number.isFinite(deadline) && hours && minutes && seconds && clock && expired) {
     const updateCountdown = () => {
@@ -75,8 +94,8 @@ if (releaseCountdown) {
       const remainingMinutes = Math.floor((wholeSeconds % 3600) / 60);
       const remainingSeconds = wholeSeconds % 60;
       hours.textContent = numberFormat.format(totalHours);
-      minutes.textContent = numberFormat.format(remainingMinutes).padStart(2, '٠');
-      seconds.textContent = numberFormat.format(remainingSeconds).padStart(2, '٠');
+      minutes.textContent = numberFormat.format(remainingMinutes).padStart(2, zero);
+      seconds.textContent = numberFormat.format(remainingSeconds).padStart(2, zero);
     };
 
     let countdownInterval;
@@ -96,17 +115,60 @@ document.querySelectorAll('[data-download-queue]').forEach((queue) => {
     if (startButton.disabled) return;
     startButton.disabled = true;
     startButton.hidden = true;
-    status.textContent = 'نأسف لك، تم وضعك في طابور الانتظار.';
+    status.textContent = copy.queueWait;
     status.hidden = false;
 
     window.setTimeout(() => {
       downloadButton.hidden = false;
-      status.textContent = 'أصبح بإمكانك تنزيل التطبيق الآن.';
+      status.textContent = copy.queueReady;
     }, 5000);
   }, { once: true });
 });
 
+function initializeAutoplayVideo() {
+  const video = document.querySelector('[data-autoplay-video]');
+  const source = video?.querySelector('source[data-src]');
+  if (!video || !source) return;
+
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  if (reducedMotion) video.removeAttribute('autoplay');
+
+  let sourceLoaded = false;
+  const loadAndPlay = () => {
+    if (!sourceLoaded) {
+      source.src = source.dataset.src || '';
+      source.removeAttribute('data-src');
+      video.load();
+      sourceLoaded = true;
+    }
+    if (!reducedMotion) {
+      const playback = video.play();
+      playback?.catch(() => {
+        // Browser autoplay policies may require the user to press Play.
+      });
+    }
+  };
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry.isIntersecting) {
+        loadAndPlay();
+      } else if (!video.paused && !video.ended) {
+        video.pause();
+      }
+    }, { rootMargin: '250px 0px' });
+    observer.observe(video);
+  } else {
+    loadAndPlay();
+  }
+}
+
+initializeAutoplayVideo();
+
 function addVerifiedBrandMarks() {
+  if (pageLanguage !== 'ar') return;
+
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       if (!node.nodeValue.includes('مرشد')) return NodeFilter.FILTER_REJECT;

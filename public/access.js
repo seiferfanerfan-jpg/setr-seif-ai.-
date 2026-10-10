@@ -5,6 +5,24 @@ const keyMessage = document.querySelector('[data-key-message]');
 const copyMessage = document.querySelector('[data-copy-message]');
 const submitButton = document.querySelector('[data-key-submit]');
 const submitLabel = document.querySelector('[data-submit-label]');
+const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
+const messages = isEnglish
+  ? {
+      generating: 'Generating your key…',
+      generate: 'Generate key',
+      requestError: 'We could not create the key. Check your details and try again later.',
+      success: 'Your key was created and the request was recorded.',
+      copied: 'Key copied. Save it somewhere private.',
+      copyFallback: 'Select the key above and copy it manually.',
+    }
+  : {
+      generating: 'جاري توليد المفتاح…',
+      generate: 'توليد مفتاح',
+      requestError: 'تعذّر إنشاء المفتاح. راجع بياناتك وحاول تاني بعد شوية.',
+      success: 'تم إنشاء المفتاح وتسجيل طلبك.',
+      copied: 'اتنسخ المفتاح. احفظه في مكان خاص.',
+      copyFallback: 'حدّدنا المفتاح؛ انسخه يدويًا من هنا.',
+    };
 
 function showMessage(element, message, isError = true) {
   if (!element) return;
@@ -30,7 +48,7 @@ if (keyForm && keyResult && keyOutput && submitButton) {
     };
 
     submitButton.disabled = true;
-    if (submitLabel) submitLabel.textContent = 'جاري توليد المفتاح…';
+    if (submitLabel) submitLabel.textContent = messages.generating;
 
     try {
       const response = await fetch('/api/access-keys', {
@@ -41,18 +59,18 @@ if (keyForm && keyResult && keyOutput && submitButton) {
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok || typeof result.key !== 'string') {
-        throw new Error(result.error || 'تعذّر إنشاء المفتاح. حاول تاني بعد شوية.');
+        throw new Error(isEnglish ? messages.requestError : (result.error || messages.requestError));
       }
 
       keyOutput.textContent = result.key;
       keyForm.hidden = true;
       keyResult.hidden = false;
       keyOutput.focus();
-      showMessage(keyMessage, 'تم إنشاء المفتاح وتسجيل طلبك.', false);
+      showMessage(keyMessage, messages.success, false);
     } catch (error) {
-      showMessage(keyMessage, error instanceof Error ? error.message : 'تعذّر إنشاء المفتاح. حاول تاني بعد شوية.');
+      showMessage(keyMessage, isEnglish ? messages.requestError : (error instanceof Error ? error.message : messages.requestError));
       submitButton.disabled = false;
-      if (submitLabel) submitLabel.textContent = 'توليد مفتاح';
+      if (submitLabel) submitLabel.textContent = messages.generate;
     }
   });
 
@@ -61,14 +79,14 @@ if (keyForm && keyResult && keyOutput && submitButton) {
     if (!key) return;
     try {
       await navigator.clipboard.writeText(key);
-      showMessage(copyMessage, 'اتنسخ المفتاح. احفظه في مكان خاص.', false);
+      showMessage(copyMessage, messages.copied, false);
     } catch {
       const selection = window.getSelection();
       const range = document.createRange();
       range.selectNodeContents(keyOutput);
       selection?.removeAllRanges();
       selection?.addRange(range);
-      showMessage(copyMessage, 'حدّدنا المفتاح؛ انسخه يدويًا من هنا.');
+      showMessage(copyMessage, messages.copyFallback);
       keyOutput.focus();
     }
   });

@@ -8,6 +8,11 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="مرشد S7 — موبايلك أسهل">
   <meta property="og:description" content="نزّل تطبيق مرشد من الرابط الرسمي، ومنصة منشئ لبناء تطبيقات Expo هتتوفر قريبًا.">
+  <link rel="canonical" href="https://setr-seif-ai.vercel.app/">
+  <link rel="alternate" hreflang="ar-EG" href="https://setr-seif-ai.vercel.app/">
+  <link rel="alternate" hreflang="en" href="https://setr-seif-ai.vercel.app/en/">
+  <link rel="alternate" hreflang="x-default" href="https://setr-seif-ai.vercel.app/">
+  <meta property="og:url" content="https://setr-seif-ai.vercel.app/">
   <link rel="icon" type="image/png" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +28,10 @@
         <span class="brand-mark" aria-hidden="true"><img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png" alt=""></span>
         <span class="brand-copy"><strong>مرشد</strong><small>مساعدك لموبايل أسهل</small></span>
       </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="افتح القائمة"><span></span><span></span></button>
+      <div class="header-actions">
+        <a class="language-toggle" href="/en/" hreflang="en" lang="en" aria-label="Switch to English">English</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="افتح القائمة"><span></span><span></span></button>
+      </div>
       <nav class="site-nav" id="site-nav" aria-label="القائمة الرئيسية">
         <a href="#about">عن مرشد</a>
         <a href="#features">المميزات</a>
@@ -84,14 +92,15 @@
         </div>
         <div class="hero-note"><span class="status-pulse" aria-hidden="true"></span><span><strong>الإصدار الأول:</strong> النسخة المتكاملة بمزايا <bdi>Pro</bdi> و<bdi>VIP</bdi>.</span></div>
       </div>
-      <div class="hero-visual" aria-label="هوية تطبيق مرشد">
-        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-        <div class="visual-caption"><span class="caption-kicker">مساعدك اليومي</span><span>كل حاجة أقرب</span></div>
-        <div class="app-icon-frame"><img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png" alt="أيقونة تطبيق مرشد"></div>
-        <div class="logo-plaque"><img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/iktpJOrsTQadVFSV.jpg" alt="شعار مرشد" loading="lazy"></div>
-        <div class="floating-chip chip-top"><span class="chip-symbol">✦</span><span><b>مصمم ليومك</b><small>تجربة عملية</small></span></div>
-        <div class="floating-chip chip-bottom"><span class="chip-check" aria-hidden="true">✓</span><span><b>المصدر الرسمي</b><small>تابع الأخبار هنا</small></span></div>
-        <span class="visual-index">01 <i></i> مرشد</span>
+      <div class="hero-visual hero-video-visual" aria-label="فيديو شرح تطبيق مرشد">
+        <div class="hero-video-frame">
+          <video class="hero-video-player" data-autoplay-video autoplay muted controls playsinline preload="none" width="360" height="640" poster="/assets/video/murshid-walkthrough-poster.jpg" aria-label="فيديو شرح استخدام تطبيق مرشد">
+            <source data-src="/assets/video/murshid-walkthrough.mp4" type="video/mp4">
+            متصفحك مش بيدعم تشغيل الفيديو. <a href="https://drive.google.com/file/d/1DQ7qmZU_w83M7bwabfyhhvNfWEu_Ba82/view?usp=drivesdk">افتحه على Google Drive</a>.
+          </video>
+        </div>
+        <div class="hero-video-caption"><span class="video-live-dot" aria-hidden="true"></span><span><strong>شرح سريع لمرشد</strong><small>بيبدأ بصوت مكتوم لما يظهر. لو ما اشتغلش دوس تشغيل.</small></span></div>
+        <a class="video-fallback" href="https://drive.google.com/file/d/1DQ7qmZU_w83M7bwabfyhhvNfWEu_Ba82/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">افتح الفيديو على Google Drive <span aria-hidden="true">↗</span></a>
       </div>
     </section>
 
@@ -258,6 +267,6 @@
     <div class="footer-bottom section-wrap"><span>© <span id="current-year">2026</span> مرشد — S7</span><span>الموقع الرسمي · التحميل من Google Drive فقط</span></div>
   </footer>
   <script src="/download-config.js" defer></script>
-  <script src="/script.js?v=counter-20261103" defer></script>
+  <script src="/script.js?v=bilingual-video-20261009" defer></script>
 </body>
 </html>
