@@ -9,7 +9,7 @@ function getAdminConfig() {
   const password = process.env.ADMIN_PASSWORD;
   const sessionSecret = process.env.ADMIN_SESSION_SECRET;
   if (
-    !password || password.length < 12
+    !password || password.length < 9
     || !sessionSecret || Buffer.byteLength(sessionSecret, 'utf8') < 32
   ) {
     throw new ApiError(503, 'لوحة الإدارة غير مهيأة بعد. تواصل مع المسؤول.');
