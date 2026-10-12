@@ -2,6 +2,20 @@
 <html lang="ar-EG" dir="rtl">
 <head>
   <meta charset="utf-8">
+  <script>
+    (() => {
+      document.documentElement.dataset.murshidIntro = 'enabled';
+      try {
+        if (localStorage.getItem('murshid-intro-message-v2') === '1') {
+          document.documentElement.classList.add('intro-seen');
+        } else {
+          document.documentElement.classList.add('intro-pending');
+        }
+      } catch {
+        document.documentElement.classList.add('intro-pending');
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07131f">
   <meta name="description" content="مرشد S7 بيسهّل استخدام موبايلك. نزّل التطبيق من الرابط الرسمي، واكتشف قريبًا منصة منشئ لبناء تطبيقات Expo من رابط GitHub.">
@@ -17,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=welcome-intro-20261012b">
   <title>مرشد S7 — موبايلك أسهل</title>
 </head>
 <body>
@@ -30,7 +44,7 @@
       </a>
       <div class="header-actions">
         <a class="language-toggle" href="/en/" hreflang="en" lang="en" aria-label="Switch to English">English</a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="افتح القائمة"><span></span><span></span></button>
+        <button class="menu-toggle" data-skip-verified type="button" aria-expanded="false" aria-controls="site-nav" aria-label="افتح القائمة"><span class="menu-icon" aria-hidden="true"><span></span><span></span></span><span class="menu-open-label" aria-hidden="true">مرشد</span></button>
       </div>
       <nav class="site-nav" id="site-nav" aria-label="القائمة الرئيسية">
         <a href="#about">عن مرشد</a>
@@ -69,15 +83,6 @@
     </div>
   </aside>
 
-  <aside class="welcome-announcement" data-welcome-announcement aria-labelledby="welcome-title" aria-live="polite" hidden>
-    <span class="welcome-spark" aria-hidden="true">✦</span>
-    <div class="welcome-copy">
-      <p class="section-kicker">رسالة ترحيب</p>
-      <h2 id="welcome-title">أهلًا بالصفوة</h2>
-      <p>أهلًا بيك في الموقع الرسمي لمرشد. حمّل التطبيق من الرابط الرسمي واتبع خطوات التنزيل الظاهرة هنا.</p>
-    </div>
-    <button class="welcome-dismiss" type="button" data-dismiss-welcome>تمام، كمل</button>
-  </aside>
 
   <main id="main">
     <section class="hero section-wrap" id="top" aria-labelledby="hero-title">
@@ -267,6 +272,6 @@
     <div class="footer-bottom section-wrap"><span>© <span id="current-year">2026</span> مرشد — S7</span><span>الموقع الرسمي · التحميل من Google Drive فقط</span></div>
   </footer>
   <script src="/download-config.js" defer></script>
-  <script src="/script.js?v=bilingual-video-20261009" defer></script>
+  <script src="/script.js?v=welcome-intro-20261012b" defer></script>
 </body>
 </html>

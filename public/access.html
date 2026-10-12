@@ -2,6 +2,20 @@
 <html lang="ar-EG" dir="rtl">
 <head>
   <meta charset="utf-8">
+  <script>
+    (() => {
+      document.documentElement.dataset.murshidIntro = 'enabled';
+      try {
+        if (localStorage.getItem('murshid-intro-message-v2') === '1') {
+          document.documentElement.classList.add('intro-seen');
+        } else {
+          document.documentElement.classList.add('intro-pending');
+        }
+      } catch {
+        document.documentElement.classList.add('intro-pending');
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07131f">
   <meta name="description" content="اطلب مفتاح الوصول لمميزات مرشد الكاملة وتطبيقات Pro. يظهر المفتاح مرة واحدة، فاحفظه ولا تشاركه.">
@@ -9,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=welcome-intro-20261012b">
   <link rel="canonical" href="https://setr-seif-ai.vercel.app/access.html">
   <link rel="alternate" hreflang="ar-EG" href="https://setr-seif-ai.vercel.app/access.html">
   <link rel="alternate" hreflang="en" href="https://setr-seif-ai.vercel.app/en/access.html">
@@ -102,6 +116,6 @@
 
   <footer class="portal-footer"><a href="/">مرشد — الصفحة الرئيسية</a><span>مفتاحك الشخصي لا تشاركه.</span><a href="/admin.html">لوحة Admin</a></footer>
   <script src="/access.js" defer></script>
-  <script src="/script.js?v=counter-20261103" defer></script>
+  <script src="/script.js?v=welcome-intro-20261012b" defer></script>
 </body>
 </html>

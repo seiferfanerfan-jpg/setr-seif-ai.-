@@ -38,26 +38,301 @@ if (menuButton && navigation) {
 const year = document.querySelector('#current-year');
 if (year) year.textContent = String(new Date().getFullYear());
 
-const welcomeAnnouncement = document.querySelector('[data-welcome-announcement]');
-if (welcomeAnnouncement) {
-  const welcomeDismissedKey = 'murshid-welcome-dismissed-v1';
-  const dismissWelcome = welcomeAnnouncement.querySelector('[data-dismiss-welcome]');
-  let alreadyDismissed = false;
+function initializeWelcomeIntro() {
+  if (!document.documentElement.hasAttribute('data-murshid-intro')) return;
+
+  const introKey = 'murshid-intro-message-v2';
+  let alreadySeen = false;
   try {
-    alreadyDismissed = window.localStorage.getItem(welcomeDismissedKey) === '1';
+    alreadySeen = window.localStorage.getItem(introKey) === '1';
   } catch {
-    alreadyDismissed = false;
+    alreadySeen = false;
   }
-  welcomeAnnouncement.hidden = alreadyDismissed;
-  dismissWelcome?.addEventListener('click', () => {
-    welcomeAnnouncement.hidden = true;
+  if (alreadySeen) {
+    document.documentElement.classList.add('intro-seen');
+    document.documentElement.classList.remove('intro-pending');
+    return;
+  }
+
+  const introCopy = pageLanguage === 'en'
+    ? {
+        direction: 'ltr',
+        language: 'en',
+        eyebrow: 'A note from the Murshid development team',
+        title: 'Murshid S7',
+        skip: 'Show the full message',
+        waiting: 'The welcome message is being written…',
+        noteWriting: 'Adding the final note…',
+        ready: 'The message is ready.',
+        enter: 'Continue to the website',
+        hashtag: '#Murshid_S7_Developer_Team',
+        closingNote: 'Please note that you are now inside the website.',
+        body: `Welcome ✿ to Murshid ۝
+Your daily companion ♡ to use your phone with ease and enjoy a clearer, smoother experience! (◔‿◔)
+
+♥️ Dear Murshid user,
+
+To help us offer you the best experience, we recommend visiting the Murshid website from time to time to follow the latest releases and updates. 💫
+
+📌 How can you follow the latest Murshid updates?
+
+1. Open the Murshid app.
+2. Go to Settings.
+3. Tap “Visit website” and wait a moment.
+
+Whenever a new version of Murshid becomes available, you’ll find its details clearly on the website, and you’ll also receive a notification from the app so you can stay up to date! 🚀
+
+Don’t forget to follow Murshid’s official channel inside the app to keep up with everything new and enjoy an easier, better experience with us. ♥️
+
+Murshid S7 ۝
+Your daily companion, always here to help you move forward! 💫
+
+`,
+      }
+    : {
+        direction: 'rtl',
+        language: 'ar-EG',
+        eyebrow: 'رسالة من فريق مطوري مرشد',
+        title: 'مرشد S7',
+        skip: 'عرض الرسالة كاملة',
+        waiting: 'بنكتبلك رسالة الترحيب…',
+        noteWriting: 'بنضيف آخر سطر…',
+        ready: 'الرسالة جاهزة.',
+        enter: 'ادخل الموقع',
+        hashtag: '#فريق_مطوري_مرشد_S7',
+        closingNote: 'مع العلم انك الان داخل الموقع الالكتروني',
+        body: `أهــلًا بيك ✿ في مُرشد ۝
+رفيقك اليومي ♡ علشان تستخدم موبايلك بسهولة، وتستمتع بتجربة أسهل وأوضح! (◔‿◔)
+
+♥️ عزيزنا مستخدم مُرشد،
+
+علشان نقدر نقدّم لك أفضل تجربة، بننصحك تزور موقع مُرشد الإلكتروني من وقت للتاني، علشان تتابع أحدث الإصدارات والتحديثات أول بأول. 💫
+
+📌 إزاي تتابع آخر تحديثات مُرشد؟
+
+١. افتح تطبيق مُرشد.
+٢. ادخل على الإعدادات.
+٣. اضغط على «زيارة الموقع الإلكتروني»، واستنى شوية.
+
+أول ما يتوفر إصدار جديد من مُرشد، هتلاقي تفاصيله واضحة على الموقع، وكمان هيوصلك إشعار من التطبيق نفسه علشان تفضل عارف كل جديد! 🚀
+
+ومتنساش تتابع القناة الرسمية لمُرشد الموجودة جوه التطبيق، علشان يوصلك كل جديد وتستمتع بتجربة أسهل وأفضل معانا. ♥️
+
+مُرشد S7 ۝
+رفيقك اليومي، وكل يوم معاك للأفضل! 💫
+
+`,
+      };
+
+  const make = (tag, className, text) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
+  };
+
+  const overlay = make('div', 'intro-overlay');
+  overlay.dataset.introOverlay = '';
+  overlay.dataset.skipVerified = '';
+  overlay.setAttribute('lang', introCopy.language);
+  overlay.setAttribute('dir', introCopy.direction);
+
+  const panel = make('section', 'intro-panel');
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-modal', 'true');
+  panel.setAttribute('aria-labelledby', 'intro-title');
+  panel.setAttribute('aria-describedby', 'intro-message-accessible');
+  panel.tabIndex = -1;
+
+  const topLine = make('div', 'intro-topline');
+  const brand = make('div', 'intro-brand');
+  brand.setAttribute('aria-hidden', 'true');
+  brand.append(make('span', 'intro-brand-mark', pageLanguage === 'en' ? 'M' : 'م'));
+  brand.append(make('span', 'intro-brand-name', pageLanguage === 'en' ? 'Murshid S7' : 'مرشد S7'));
+  const skipButton = make('button', 'intro-skip', introCopy.skip);
+  skipButton.type = 'button';
+  skipButton.setAttribute('data-intro-skip', '');
+  topLine.append(brand, skipButton);
+
+  const heading = make('p', 'intro-eyebrow', introCopy.eyebrow);
+  const title = make('h1', 'intro-title', introCopy.title);
+  title.id = 'intro-title';
+  const typedCopy = make('p', 'intro-typed-copy');
+  typedCopy.setAttribute('aria-hidden', 'true');
+  typedCopy.dir = introCopy.direction;
+  typedCopy.classList.add('is-typing');
+
+  const signature = make('div', 'intro-signature');
+  signature.hidden = true;
+  const hashtag = make('bdi', 'intro-hashtag', introCopy.hashtag);
+  hashtag.dir = 'ltr';
+  signature.append(hashtag);
+  const verifiedMark = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  verifiedMark.setAttribute('class', 'intro-verified');
+  verifiedMark.setAttribute('viewBox', '0 0 24 24');
+  verifiedMark.setAttribute('aria-hidden', 'true');
+  verifiedMark.setAttribute('focusable', 'false');
+  const verifiedCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  verifiedCircle.setAttribute('cx', '12');
+  verifiedCircle.setAttribute('cy', '12');
+  verifiedCircle.setAttribute('r', '11');
+  verifiedCircle.setAttribute('fill', '#2787f5');
+  const verifiedCheck = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  verifiedCheck.setAttribute('d', 'm6.7 12.3 3.4 3.3 7.2-7.4');
+  verifiedCheck.setAttribute('fill', 'none');
+  verifiedCheck.setAttribute('stroke', '#fff');
+  verifiedCheck.setAttribute('stroke-width', '2.4');
+  verifiedCheck.setAttribute('stroke-linecap', 'round');
+  verifiedCheck.setAttribute('stroke-linejoin', 'round');
+  verifiedMark.append(verifiedCircle, verifiedCheck);
+  signature.append(verifiedMark);
+
+  const closingNote = make('p', 'intro-closing-note');
+  closingNote.hidden = true;
+  closingNote.dir = introCopy.direction;
+  const accessibleMessage = make('p', 'intro-sr-only', `${introCopy.body}${introCopy.hashtag}\n${introCopy.closingNote}`);
+  accessibleMessage.id = 'intro-message-accessible';
+  const actions = make('div', 'intro-actions');
+  const hint = make('p', 'intro-hint', introCopy.waiting);
+  hint.setAttribute('role', 'status');
+  hint.setAttribute('aria-live', 'polite');
+  const enterButton = make('button', 'intro-enter', introCopy.enter);
+  enterButton.type = 'button';
+  enterButton.hidden = true;
+  actions.append(hint, enterButton);
+
+  panel.append(topLine, heading, title, typedCopy, signature, closingNote, accessibleMessage, actions);
+  overlay.append(panel);
+
+  const inertedNodes = Array.from(document.body.children)
+    .filter((node) => node !== overlay && node.tagName !== 'SCRIPT')
+    .map((node) => ({ node, wasInert: node.inert }));
+  document.body.insertBefore(overlay, document.body.firstChild);
+  inertedNodes.forEach(({ node }) => { node.inert = true; });
+  document.body.classList.add('intro-open');
+  document.documentElement.classList.remove('intro-pending');
+
+  let complete = false;
+  let timer = 0;
+  const segmenter = typeof Intl.Segmenter === 'function'
+    ? new Intl.Segmenter(introCopy.language, { granularity: 'grapheme' })
+    : null;
+  const graphemes = segmenter
+    ? Array.from(segmenter.segment(introCopy.body), (part) => part.segment)
+    : Array.from(introCopy.body);
+  const noteGraphemes = segmenter
+    ? Array.from(segmenter.segment(introCopy.closingNote), (part) => part.segment)
+    : Array.from(introCopy.closingNote);
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  let index = 0;
+  let noteIndex = 0;
+
+  const finishMessage = () => {
+    if (complete) return;
+    complete = true;
+    window.clearTimeout(timer);
+    typedCopy.textContent = introCopy.body;
+    typedCopy.classList.remove('is-typing');
+    signature.hidden = false;
+    signature.classList.add('is-visible');
+    closingNote.textContent = introCopy.closingNote;
+    closingNote.hidden = false;
+    closingNote.classList.remove('is-typing');
+    skipButton.hidden = true;
+    enterButton.hidden = false;
+    hint.textContent = introCopy.ready;
+    window.setTimeout(() => enterButton.focus({ preventScroll: false }), 100);
+  };
+
+  const typeClosingNote = () => {
+    const wasAtBottom = panel.scrollHeight - panel.scrollTop - panel.clientHeight < 72;
+    const fragment = document.createDocumentFragment();
+    for (let count = 0; count < 2 && noteIndex < noteGraphemes.length; count += 1, noteIndex += 1) {
+      fragment.append(document.createTextNode(noteGraphemes[noteIndex]));
+    }
+    closingNote.append(fragment);
+    if (wasAtBottom) panel.scrollTop = panel.scrollHeight;
+    if (noteIndex >= noteGraphemes.length) finishMessage();
+    else timer = window.setTimeout(typeClosingNote, 18);
+  };
+
+  const finishBodyTyping = () => {
+    if (complete) return;
+    typedCopy.textContent = introCopy.body;
+    typedCopy.classList.remove('is-typing');
+    signature.hidden = false;
+    signature.classList.add('is-visible');
+    closingNote.hidden = false;
+    closingNote.classList.add('is-typing');
+    hint.textContent = introCopy.noteWriting;
+    if (reducedMotion) finishMessage();
+    else timer = window.setTimeout(typeClosingNote, 140);
+  };
+
+  const typeNext = () => {
+    const wasAtBottom = panel.scrollHeight - panel.scrollTop - panel.clientHeight < 72;
+    const fragment = document.createDocumentFragment();
+    for (let count = 0; count < 2 && index < graphemes.length; count += 1, index += 1) {
+      fragment.append(document.createTextNode(graphemes[index]));
+    }
+    typedCopy.append(fragment);
+    if (wasAtBottom) panel.scrollTop = panel.scrollHeight;
+    if (index >= graphemes.length) finishBodyTyping();
+    else timer = window.setTimeout(typeNext, 18);
+  };
+
+  skipButton.addEventListener('click', finishMessage);
+  enterButton.addEventListener('click', () => {
+    if (!complete) return;
     try {
-      window.localStorage.setItem(welcomeDismissedKey, '1');
+      window.localStorage.setItem(introKey, '1');
     } catch {
-      // The message still closes for this page view if storage is unavailable.
+      // The message can still be dismissed for this page view.
+    }
+    document.documentElement.classList.add('intro-seen');
+    document.body.classList.remove('intro-open');
+    overlay.classList.add('is-closing');
+    window.setTimeout(() => {
+      overlay.remove();
+      inertedNodes.forEach(({ node, wasInert }) => { node.inert = wasInert; });
+      const returnFocus = document.querySelector('.brand, #main h1, main');
+      returnFocus?.focus?.({ preventScroll: true });
+    }, 360);
+  });
+
+  panel.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !complete) {
+      event.preventDefault();
+      finishMessage();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [skipButton, enterButton].filter((button) => !button.hidden && !button.disabled);
+    if (!focusable.length) {
+      event.preventDefault();
+      panel.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
     }
   });
+
+  if (reducedMotion) {
+    finishMessage();
+  } else {
+    window.setTimeout(() => skipButton.focus({ preventScroll: true }), 0);
+    timer = window.setTimeout(typeNext, 180);
+  }
 }
+
+initializeWelcomeIntro();
 
 const downloadConfig = window.MURSHID_DOWNLOAD_CONFIG || {};
 const fileId = typeof downloadConfig.googleDriveFileId === 'string'

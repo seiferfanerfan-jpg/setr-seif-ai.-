@@ -2,6 +2,20 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
+  <script>
+    (() => {
+      document.documentElement.dataset.murshidIntro = 'enabled';
+      try {
+        if (localStorage.getItem('murshid-intro-message-v2') === '1') {
+          document.documentElement.classList.add('intro-seen');
+        } else {
+          document.documentElement.classList.add('intro-pending');
+        }
+      } catch {
+        document.documentElement.classList.add('intro-pending');
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07131f">
   <meta name="description" content="Request a personal access key for Murshid Pro features. Your key is shown once, so save it and do not share it.">
@@ -14,7 +28,7 @@
   <link rel="alternate" hreflang="en" href="https://setr-seif-ai.vercel.app/en/access.html">
   <link rel="alternate" hreflang="x-default" href="https://setr-seif-ai.vercel.app/access.html">
   <link rel="icon" type="image/png" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=welcome-intro-20261012b">
   <title>Access Murshid features — Murshid</title>
 </head>
 <body class="portal-page">
@@ -24,9 +38,6 @@
     <nav class="site-nav guide-nav" aria-label="Navigation"><a href="/en/">Home</a><a href="/en/#privacy">Privacy</a><a class="nav-contact" href="/admin.html">Admin panel</a><a class="language-toggle" href="/access.html" hreflang="ar-EG" lang="ar-EG" aria-label="التبديل إلى العربية">العربية</a></nav>
   </div></header>
 
-  <aside class="welcome-announcement" data-welcome-announcement aria-labelledby="welcome-title" aria-live="polite" hidden>
-    <span class="welcome-spark" aria-hidden="true">✦</span><div class="welcome-copy"><p class="section-kicker">A quick welcome</p><h2 id="welcome-title">Welcome to Murshid.</h2><p>You’re on the official Murshid website. Use the official links and follow the instructions shown here.</p></div><button class="welcome-dismiss" type="button" data-dismiss-welcome>Got it — continue</button>
-  </aside>
 
   <main class="portal-main section-wrap" id="main">
     <a class="portal-back" href="/en/" aria-label="Back to the home page"><span aria-hidden="true">←</span> Back to Murshid</a>
@@ -65,6 +76,6 @@
   </main>
   <footer class="portal-footer"><a href="/en/">Murshid — home page</a><span>Keep your personal key private.</span><a href="/admin.html">Admin panel</a></footer>
   <script src="/access.js" defer></script>
-  <script src="/script.js?v=bilingual-video-20261010" defer></script>
+  <script src="/script.js?v=welcome-intro-20261012b" defer></script>
 </body>
 </html>

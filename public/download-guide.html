@@ -2,6 +2,20 @@
 <html lang="ar-EG" dir="rtl">
 <head>
   <meta charset="utf-8">
+  <script>
+    (() => {
+      document.documentElement.dataset.murshidIntro = 'enabled';
+      try {
+        if (localStorage.getItem('murshid-intro-message-v2') === '1') {
+          document.documentElement.classList.add('intro-seen');
+        } else {
+          document.documentElement.classList.add('intro-pending');
+        }
+      } catch {
+        document.documentElement.classList.add('intro-pending');
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07131f">
   <meta name="description" content="شرح تنزيل أول نسخة من مرشد من رابط Google Drive الرسمي، ونسخ الرابط وتثبيت ملف APK على جهاز Android متوافق.">
@@ -17,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=welcome-intro-20261012b">
   <title>إزاي تحمّل مرشد؟ — الموقع الرسمي</title>
 </head>
 <body>
@@ -38,15 +52,6 @@
     </div>
   </header>
 
-  <aside class="welcome-announcement" data-welcome-announcement aria-labelledby="welcome-title" aria-live="polite" hidden>
-    <span class="welcome-spark" aria-hidden="true">✦</span>
-    <div class="welcome-copy">
-      <p class="section-kicker">رسالة ترحيب</p>
-      <h2 id="welcome-title">أهلًا بالصفوة</h2>
-      <p>أهلًا بيك في الموقع الرسمي لمرشد. حمّل التطبيق من الرابط الرسمي واتبع خطوات التنزيل الظاهرة هنا.</p>
-    </div>
-    <button class="welcome-dismiss" type="button" data-dismiss-welcome>تمام، كمل</button>
-  </aside>
 
   <main id="main" class="download-guide-main section-wrap">
     <section class="guide-hero" aria-labelledby="guide-title">
@@ -108,6 +113,6 @@
     <div class="footer-bottom section-wrap"><span>© <span id="current-year">2026</span> مرشد — S7</span><span>دليل التنزيل الرسمي</span></div>
   </footer>
   <script src="/download-config.js" defer></script>
-  <script src="/script.js" defer></script>
+  <script src="/script.js?v=welcome-intro-20261012b" defer></script>
 </body>
 </html>

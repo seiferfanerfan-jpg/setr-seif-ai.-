@@ -2,6 +2,20 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
+  <script>
+    (() => {
+      document.documentElement.dataset.murshidIntro = 'enabled';
+      try {
+        if (localStorage.getItem('murshid-intro-message-v2') === '1') {
+          document.documentElement.classList.add('intro-seen');
+        } else {
+          document.documentElement.classList.add('intro-pending');
+        }
+      } catch {
+        document.documentElement.classList.add('intro-pending');
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07131f">
   <meta name="description" content="Learn how to download Murshid from its official Google Drive link, and install the APK on a compatible Android device.">
@@ -14,7 +28,7 @@
   <link rel="alternate" hreflang="x-default" href="https://setr-seif-ai.vercel.app/download-guide.html">
   <meta property="og:url" content="https://setr-seif-ai.vercel.app/en/download-guide.html">
   <link rel="icon" type="image/png" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663230730968/cykSoRlSpZaPGqvZ.png">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=welcome-intro-20261012b">
   <title>How to Download Murshid — Official Guide</title>
 </head>
 <body>
@@ -35,15 +49,6 @@
     </div>
   </header>
 
-  <aside class="welcome-announcement" data-welcome-announcement aria-labelledby="welcome-title" aria-live="polite" hidden>
-    <span class="welcome-spark" aria-hidden="true">✦</span>
-    <div class="welcome-copy">
-      <p class="section-kicker">A quick welcome</p>
-      <h2 id="welcome-title">Welcome to Murshid.</h2>
-      <p>You’re on the official Murshid website. Download the app only from the official link, and follow the clear download instructions here.</p>
-    </div>
-    <button class="welcome-dismiss" type="button" data-dismiss-welcome>Got it — continue</button>
-  </aside>
 
   <main id="main" class="download-guide-main section-wrap">
     <section class="guide-hero" aria-labelledby="guide-title">
@@ -105,6 +110,6 @@
     <div class="footer-bottom section-wrap"><span>© <span id="current-year">2026</span> Murshid — S7</span><span>Official download guide</span></div>
   </footer>
   <script src="/download-config.js" defer></script>
-  <script src="/script.js?v=bilingual-video-20261009" defer></script>
+  <script src="/script.js?v=welcome-intro-20261012b" defer></script>
 </body>
 </html>
