@@ -15,6 +15,7 @@ import {
   readJson,
 } from '../server/lib/http.js';
 import { digestAccessKey, firstFourLetters, generateAccessKey, normalizeName } from '../server/lib/key.js';
+import { encryptAccessKey } from '../server/lib/key-crypto.js';
 
 function normalizeEmail(value) {
   return String(value || '').trim().toLowerCase();
@@ -77,12 +78,14 @@ export default {
 
       const { key } = generateAccessKey(name);
       const keyDigest = digestAccessKey(key, pepper);
+      const id = randomUUID();
+      const encryptedKey = encryptAccessKey(key, pepper, id);
       const sql = getSql();
       await sql`
         INSERT INTO public.access_key_records
-          (id, full_name, email, name_prefix, key_digest, consent_at)
+          (id, full_name, email, name_prefix, key_digest, encrypted_key, consent_at)
         VALUES
-          (${randomUUID()}, ${name}, ${email}, ${prefix}, ${keyDigest}, now())
+          (${id}, ${name}, ${email}, ${prefix}, ${keyDigest}, ${encryptedKey}, now())
       `;
 
       return jsonResponse({ key }, 201, { 'Referrer-Policy': 'no-referrer' });

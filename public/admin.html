@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/admin.css?v=key-reveal-20261014">
   <title>لوحة Admin — مرشد</title>
 </head>
 <body class="portal-page admin-page">
@@ -34,7 +35,7 @@
       <div class="admin-heading">
         <p class="section-kicker">منطقة خاصة / إدارة الطلبات</p>
         <h1 id="admin-title">لوحة <bdi>Admin</bdi></h1>
-        <p>سجلات طلبات مفاتيح الوصول. المفتاح الكامل لا يُحفظ ولا يظهر في هذه اللوحة.</p>
+        <p>سجلات طلبات الوصول. المفاتيح الجديدة محفوظة مشفّرة، ولا تظهر إلا للمسؤول بعد تسجيل الدخول.</p>
       </div>
 
       <form class="admin-login portal-card" data-admin-login>
@@ -61,11 +62,11 @@
         <p class="portal-message" data-admin-message role="status" aria-live="polite" hidden></p>
         <div class="admin-table-wrap" tabindex="0" aria-label="جدول طلبات الوصول؛ مرّر أفقيًا لعرض الأعمدة الأخرى">
           <table class="admin-table">
-            <thead><tr><th scope="col">الاسم</th><th scope="col">البريد الإلكتروني</th><th scope="col">معرّف المفتاح المقنّع</th><th scope="col">الحالة</th><th scope="col">تاريخ الطلب</th><th scope="col">إجراء</th></tr></thead>
+            <thead><tr><th scope="col">الاسم</th><th scope="col">البريد الإلكتروني</th><th scope="col">مفتاح الوصول</th><th scope="col">الحالة</th><th scope="col">تاريخ الطلب</th><th scope="col">إجراء</th></tr></thead>
             <tbody data-admin-records></tbody>
           </table>
         </div>
-        <p class="admin-note">المفتاح الكامل يظهر للمستخدم مرة واحدة فقط. الحذف يزيل بيانات الطلب وبصمة المفتاح نهائيًا.</p>
+        <p class="admin-note">اضغط «إظهار المفتاح» للمفاتيح الصادرة بعد التحديث. السجلات الأقدم تحفظ بصمة فقط ولا يمكن استرجاع مفاتيحها. الحذف يزيل بيانات الطلب والبصمة والنسخة المشفّرة نهائيًا.</p>
       </section>
 
       <aside class="portal-boundary admin-boundary">
@@ -76,7 +77,7 @@
   </main>
 
   <footer class="portal-footer"><a href="/">مرشد — الصفحة الرئيسية</a><a href="/access.html">بوابة الوصول</a><span>لوحة خاصة بالمسؤول</span></footer>
-  <script src="/admin.js" defer></script>
+  <script src="/admin.js?v=key-reveal-20261014" defer></script>
   <script src="/script.js?v=counter-20261103" defer></script>
 </body>
 </html>

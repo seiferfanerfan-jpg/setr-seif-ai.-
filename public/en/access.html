@@ -54,17 +54,17 @@
       <div class="portal-card">
         <div class="portal-card-heading"><span class="portal-card-step">01 / Personal key</span><span class="portal-lock" aria-hidden="true">⌑</span></div>
         <h2>Generate an access key</h2>
-        <p class="portal-card-intro">The key is associated with your name. Save it when it appears; the admin panel cannot recover the full key text.</p>
+        <p class="portal-card-intro">The key is associated with your name and stored encrypted. An authorized administrator can reveal it from the admin panel when needed.</p>
         <form class="portal-form" data-key-form>
           <label class="portal-field"><span>Full name</span><input name="name" type="text" autocomplete="name" minlength="2" maxlength="120" required placeholder="Enter your name" aria-describedby="name-help"><small id="name-help">The key will start with the first four available letters of your name.</small></label>
           <label class="portal-field"><span>Email address</span><input name="email" type="email" autocomplete="email" maxlength="254" required placeholder="name@example.com" dir="ltr"></label>
           <div class="portal-honeypot" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-          <label class="portal-consent"><input name="consent" type="checkbox" required><span>I agree that my name, email address, and a fingerprint of the key may be stored to manage this access request, as described in the <a href="/en/#privacy">privacy notice</a>.</span></label>
+          <label class="portal-consent"><input name="consent" type="checkbox" required><span>I agree that my name, email address, and key fingerprint may be stored, and that an encrypted copy of the key may be kept for an authorized administrator to reveal when managing this request, as described in the <a href="/en/#privacy">privacy notice</a>.</span></label>
           <button class="button button-primary portal-submit" type="submit" data-key-submit><span data-submit-label>Generate key</span><span aria-hidden="true">→</span></button>
           <p class="portal-message" data-key-message role="status" aria-live="polite" hidden></p>
         </form>
         <section class="key-result" data-key-result aria-labelledby="key-result-title" aria-live="polite" hidden>
-          <span class="key-result-mark" aria-hidden="true">✓</span><p class="section-kicker">Your key is ready</p><h3 id="key-result-title">Save it now</h3><p class="key-result-copy">It won’t be shown again and cannot be recovered from the admin panel.</p>
+          <span class="key-result-mark" aria-hidden="true">✓</span><p class="section-kicker">Your key is ready</p><h3 id="key-result-title">Save it now</h3><p class="key-result-copy">It appears here once. If needed later, an authorized administrator can reveal it from the admin panel.</p>
           <div class="key-copy-row"><code data-key-output dir="ltr" tabindex="0" aria-label="Personal access key"></code><button class="button button-quiet key-copy-button" type="button" data-copy-key>Copy key</button></div>
           <p class="key-secret-note">Your key is private. Don’t share it with anyone.</p><p class="portal-message" data-copy-message role="status" aria-live="polite" hidden></p>
         </section>

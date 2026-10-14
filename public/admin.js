@@ -38,6 +38,62 @@ function appendCell(row, text, className = '') {
   return cell;
 }
 
+function renderKeyCell(cell, record) {
+  const value = document.createElement('code');
+  value.className = 'admin-key-value';
+  value.dir = 'ltr';
+  value.textContent = record.keyHint || '—';
+
+  const actions = document.createElement('div');
+  actions.className = 'admin-key-actions';
+
+  if (!record.keyAvailable) {
+    const note = document.createElement('span');
+    note.className = 'admin-key-unavailable';
+    note.textContent = 'مفتاح قديم — غير قابل للاسترجاع';
+    actions.append(note);
+    cell.replaceChildren(value, actions);
+    return;
+  }
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'admin-key-reveal-button';
+  button.textContent = 'إظهار المفتاح';
+  let revealed = false;
+
+  button.addEventListener('click', async () => {
+    if (revealed) {
+      value.textContent = record.keyHint || '—';
+      revealed = false;
+      button.textContent = 'إظهار المفتاح';
+      return;
+    }
+
+    setMessage(adminMessage, '');
+    button.disabled = true;
+    button.textContent = 'جاري التحقق…';
+    try {
+      const result = await apiRequest('/api/admin/keys', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'reveal', id: record.id }),
+      });
+      if (typeof result.key !== 'string' || !result.key) throw new Error('تعذّر عرض المفتاح.');
+      value.textContent = result.key;
+      revealed = true;
+      button.textContent = 'إخفاء المفتاح';
+    } catch (error) {
+      setMessage(adminMessage, error.message || 'تعذّر عرض المفتاح.');
+      button.textContent = 'إظهار المفتاح';
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  actions.append(button);
+  cell.replaceChildren(value, actions);
+}
+
 function renderRecords(records) {
   if (!recordsBody || !adminCount) return;
   recordsBody.replaceChildren();
@@ -59,7 +115,8 @@ function renderRecords(records) {
     row.dataset.recordId = record.id;
     appendCell(row, record.fullName);
     appendCell(row, record.email, 'admin-email');
-    appendCell(row, record.keyHint, 'admin-key-hint');
+    const keyCell = appendCell(row, '', 'admin-key-cell');
+    renderKeyCell(keyCell, record);
     appendCell(row, record.status === 'issued' ? 'مُصدَر' : 'ملغي');
     const date = new Date(record.createdAt);
     appendCell(row, Number.isNaN(date.getTime()) ? '—' : date.toLocaleString('ar-EG'));
@@ -98,7 +155,7 @@ async function loadRecords() {
 }
 
 async function deleteRecord(id, row) {
-  const confirmed = window.confirm('سيُحذف الاسم والبريد وبصمة المفتاح نهائيًا، ولا يمكن التراجع. هل تريد المتابعة؟');
+  const confirmed = window.confirm('سيُحذف الاسم والبريد وبصمة المفتاح والنسخة المشفّرة نهائيًا، ولا يمكن التراجع. هل تريد المتابعة؟');
   if (!confirmed) return;
   try {
     await apiRequest('/api/admin/keys', { method: 'DELETE', body: JSON.stringify({ id }) });

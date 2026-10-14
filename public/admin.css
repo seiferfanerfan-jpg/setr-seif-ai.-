@@ -1,0 +1,52 @@
+.admin-key-cell {
+  min-width: 180px;
+  direction: ltr;
+  text-align: left;
+}
+
+.admin-key-value {
+  display: block;
+  max-width: 280px;
+  color: #78e5d6;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px;
+  line-height: 1.55;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  unicode-bidi: plaintext;
+}
+
+.admin-key-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+  direction: rtl;
+}
+
+.admin-key-reveal-button {
+  border: 1px solid rgba(86, 211, 197, .28);
+  border-radius: 8px;
+  padding: 6px 9px;
+  background: rgba(49, 208, 188, .08);
+  color: #9aefe1;
+  font: inherit;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.admin-key-reveal-button:hover:not(:disabled) {
+  background: rgba(49, 208, 188, .16);
+}
+
+.admin-key-reveal-button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.admin-key-unavailable {
+  display: block;
+  margin-top: 7px;
+  color: #c5a981;
+  font-size: 9px;
+  line-height: 1.6;
+}
