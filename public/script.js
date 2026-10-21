@@ -531,3 +531,64 @@ function initializeAdminPageVisibility() {
 }
 
 initializeAdminPageVisibility();
+
+
+function initializeDeveloperTeamForms() {
+  const forms = [...document.querySelectorAll('[data-developer-form]')];
+  if (!forms.length) return;
+  const email = 'seiferfan077@gmail.com';
+  const copy = {
+    ar: { name: 'اكتب اسمك بشكل صحيح عشان نقدر نراجع الطلب.', phone: 'راجع رقم الموبايل واكتبه بشكل صحيح.', key: 'اكتب مفتاح الوصول VIP اللي معاك.', consent: 'لازم توافق على البنود والخصوصية قبل تجهيز الطلب.', ready: 'اتجهّزت مسودة الإيميل. راجعها واضغط إرسال عشان يوصل طلبك للفريق.' },
+    en: { name: 'Enter your name so the team can review the application.', phone: 'Check and enter a valid phone number.', key: 'Enter your VIP access key.', consent: 'Please accept the terms and privacy rules before preparing the application.', ready: 'The email draft is ready. Review it and press Send to submit your application.' },
+  };
+  forms.forEach((form) => {
+    const language = form.dataset.language === 'en' ? 'en' : 'ar';
+    const text = copy[language];
+    const status = form.querySelector('[data-form-status]');
+    const notice = form.querySelector('[data-consent-notice]');
+    const consent = form.elements.consent;
+    const setStatus = (message, state = '') => { status.textContent = message; status.dataset.state = state; };
+    consent?.addEventListener('change', () => {
+      if (notice) notice.hidden = !consent.checked;
+      if (consent.checked) setStatus('');
+    });
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = form.elements.name.value.trim().replace(/[\r\n]+/g, ' ');
+      const phone = form.elements.phone.value.trim().replace(/[\r\n]+/g, ' ');
+      const vipKey = form.elements.vipKey.value.trim().replace(/[\r\n]+/g, ' ');
+      const phoneDigits = phone.replace(/[^0-9٠-٩]/g, '');
+      if (name.length < 2) return setStatus(text.name, 'error');
+      if (phoneDigits.length < 6) return setStatus(text.phone, 'error');
+      if (!vipKey) return setStatus(text.key, 'error');
+      if (!consent.checked) return setStatus(text.consent, 'error');
+      const subject = language === 'en'
+        ? 'Murshid developer team application — Admin review'
+        : 'طلب الانضمام لفريق مطوري مُرشد S7 — مراجعة Admin';
+      const body = language === 'en'
+        ? [
+            'Hello Murshid S7 development team,',
+            'I am applying to join the Murshid developer team and asking you to review my application for a possible Admin role. I want to contribute responsibly to improving the app and serving its users.',
+            '', 'My details:', `Full name: ${name}`, `Phone number: ${phone}`, `VIP access key: ${vipKey}`,
+            '',
+            'I confirm that the information is accurate and that I am authorized to submit this key for review. I understand that a key not registered on the website is not rejected automatically and will be reviewed manually. Sending this application does not grant Admin access or access to user data. The team may contact me for clarification or a trial task.',
+            'If approved, I will protect user privacy, keep keys and information confidential, follow security guidance, and use any permission only for authorized work. I understand that sharing credentials or misusing permissions may lead to rejection or removal of access. I agree to the terms, privacy rules, and responsible work commitment.',
+            '', 'Please review my application and contact me with the decision and next steps.', 'Sincerely,', name,
+          ].join('\n')
+        : [
+            'السلام عليكم ورحمة الله وبركاته،',
+            'إلى فريق مطوري مُرشد S7،',
+            'أتقدم بطلب الانضمام إلى فريق مطوري مُرشد والنظر في منحي دور Admin بعد مراجعة الطلب. أرغب في المساهمة في تحسين التطبيق وخدمة مستخدميه، وأتعهد بالعمل بجدية وأمانة واحترام واتباع توجيهات الفريق وسياسات الخصوصية والأمان.',
+            '', 'بياناتي:', `الاسم: ${name}`, `رقم الهاتف: ${phone}`, `مفتاح الوصول VIP: ${vipKey}`,
+            '',
+            'أؤكد صحة البيانات وأنني مخول باستخدام المفتاح المذكور لغرض مراجعة هذا الطلب. أعلم أن المفتاح غير المسجل بالموقع لا يؤدي إلى رفض الطلب تلقائيًا، بل يخضع للمراجعة اليدوية، وأن تقديم الطلب لا يمنحني صلاحية Admin أو وصولًا لأي بيانات. القرار يعود للفريق وقد يطلب توضيحات إضافية أو مهمة تجريبية.',
+            'إذا تمت الموافقة، أتعهد بالمحافظة على سرية معلومات المستخدمين والمفاتيح، وعدم استخدامها إلا ضمن المهام المصرح بها، واحترام الخصوصية والإبلاغ عن أي مشكلة أمنية. أفهم أن مشاركة بيانات الدخول أو إساءة استخدام الصلاحيات قد يؤدي إلى رفض الطلب أو سحبها، وأوافق على الالتزام بالشروط والخصوصية والعمل بأمانة وضمير كامل.',
+            '', 'أرجو مراجعة طلبي والتواصل معي لإبلاغي بالقرار والخطوات التالية.', 'مع خالص التقدير،', name,
+          ].join('\n');
+      setStatus(text.ready);
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  });
+}
+
+initializeDeveloperTeamForms();
