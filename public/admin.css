@@ -50,3 +50,13 @@
   font-size: 9px;
   line-height: 1.6;
 }
+
+
+/* Hide the Admin interface until the footer-logo gesture is completed */
+.admin-discovery-gate{display:none}
+html.admin-discovery-locked body.admin-page>:not(.admin-discovery-gate){display:none!important}
+html.admin-discovery-locked .admin-discovery-gate{position:fixed;z-index:10000;inset:0;display:grid;place-items:center;min-height:100vh;padding:24px;background:radial-gradient(ellipse at 18% 8%,rgba(57,199,181,.12),transparent 38%),linear-gradient(145deg,#06111b,#0a1c2b);color:#f2f9fa}
+.admin-discovery-card{width:min(100%,480px);padding:clamp(24px,6vw,42px);border:1px solid rgba(115,226,211,.22);border-radius:24px;background:rgba(11,35,53,.94);box-shadow:0 28px 90px rgba(0,0,0,.42);text-align:center}
+.admin-discovery-card h1{margin:15px 0 8px;font-size:clamp(26px,7vw,38px);line-height:1.35;color:#f4fbfc}
+.admin-discovery-card p{margin:0 0 22px;color:#acc0c8;font-size:14px;line-height:1.9}
+.admin-discovery-card .button{width:100%}

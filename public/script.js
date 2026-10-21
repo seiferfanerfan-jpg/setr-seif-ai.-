@@ -516,3 +516,18 @@ function initializeAdminDiscovery() {
 }
 
 initializeAdminDiscovery();
+
+
+function initializeAdminPageVisibility() {
+  const root = document.documentElement;
+  if (!root.classList.contains('admin-discovery-locked')) return;
+  try {
+    if (sessionStorage.getItem('murshid-admin-discovery-unlocked-v1') === '1') {
+      root.classList.remove('admin-discovery-locked');
+    }
+  } catch {
+    // Leave the Admin page hidden if session storage cannot be checked.
+  }
+}
+
+initializeAdminPageVisibility();
