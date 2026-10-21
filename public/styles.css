@@ -440,3 +440,12 @@ html[dir="ltr"] .tutorial-copy .section-kicker{letter-spacing:.02em}
 html[dir="ltr"] .tutorial-vip-cta{direction:ltr}
 html[dir="ltr"] .tutorial-vip-arrow{font-size:15px}
 @media(prefers-reduced-motion:reduce){.tutorial-vip-cta{transition:none}.tutorial-vip-cta:hover{transform:none}}
+
+
+/* Hidden Admin discovery through the footer brand mark */
+button.admin-unlock-trigger{appearance:none;padding:0;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+button.admin-unlock-trigger:hover{transform:scale(1.06);box-shadow:0 0 24px rgba(49,208,188,.24)}
+.footer-brand-link{color:inherit;text-decoration:none}
+.admin-secret-link{color:#72e8d5!important;font-weight:700;text-underline-offset:4px}
+.admin-secret-link[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){button.admin-unlock-trigger{transition:none}button.admin-unlock-trigger:hover{transform:none}}

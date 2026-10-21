@@ -475,3 +475,44 @@ function addVerifiedBrandMarks() {
 }
 
 addVerifiedBrandMarks();
+
+
+function initializeAdminDiscovery() {
+  const triggers = [...document.querySelectorAll('[data-admin-unlock-trigger]')];
+  const links = [...document.querySelectorAll('[data-admin-unlock-link]')];
+  if (!links.length) return;
+
+  const countKey = 'murshid-admin-discovery-count-v1';
+  const unlockedKey = 'murshid-admin-discovery-unlocked-v1';
+  let count = 0;
+  let unlocked = false;
+
+  try {
+    count = Number.parseInt(sessionStorage.getItem(countKey) || '0', 10) || 0;
+    unlocked = sessionStorage.getItem(unlockedKey) === '1';
+  } catch {
+    // Keep the counter in memory if browser storage is unavailable.
+  }
+
+  const revealLinks = () => {
+    links.forEach((link) => { link.hidden = false; });
+  };
+
+  if (unlocked) revealLinks();
+  if (unlocked || !triggers.length) return;
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      count = Math.min(30, count + 1);
+      try { sessionStorage.setItem(countKey, String(count)); } catch {}
+
+      if (count >= 30) {
+        unlocked = true;
+        try { sessionStorage.setItem(unlockedKey, '1'); } catch {}
+        revealLinks();
+      }
+    });
+  });
+}
+
+initializeAdminDiscovery();
