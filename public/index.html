@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=admin-discovery-20261021">
+  <link rel="stylesheet" href="/styles.css?v=welcome-video-nav-20261104">
   <title>مرشد S7 — موبايلك أسهل</title>
 </head>
 <body>
@@ -60,31 +60,6 @@
     </div>
   </header>
 
-  <aside class="release-banner section-wrap" aria-labelledby="release-banner-title">
-    <span class="release-banner-mark" aria-hidden="true">01</span>
-    <div class="release-banner-copy">
-      <div class="release-banner-meta"><span class="release-banner-label">إعلان الإصدار الأول</span><span class="release-banner-window-label">فترة الإطلاق المتوقعة</span></div>
-      <h2 id="release-banner-title">الإصدار الأول الكامل من مرشد</h2>
-      <p>النسخة المنشورة على الموقع هي الإصدار الأول المتكامل، وليست نسخة أولية، وتضم مزايا <bdi>Pro</bdi> و<bdi>VIP</bdi>.</p>
-    </div>
-    <div class="release-banner-date" aria-label="من 25 أكتوبر إلى 3 نوفمبر 2026 بتوقيت القاهرة">
-      <span class="release-banner-date-range"><time datetime="2026-10-25">25 أكتوبر</time><span aria-hidden="true">—</span><time datetime="2026-11-03">3 نوفمبر 2026</time></span>
-      <small>بتوقيت القاهرة</small>
-    </div>
-    <div class="release-countdown" data-release-countdown data-deadline="2026-11-03T23:59:00+02:00" role="timer" aria-label="الوقت المتبقي حتى 3 نوفمبر 2026، الساعة 23:59 بتوقيت القاهرة">
-      <span class="release-countdown-label">الوقت المتبقي حتى نهاية الفترة</span>
-      <div class="release-countdown-clock" data-countdown-clock dir="ltr">
-        <span class="release-countdown-segment"><b data-countdown-hours>--</b><small>ساعة</small></span>
-        <span class="release-countdown-separator" aria-hidden="true">:</span>
-        <span class="release-countdown-segment"><b data-countdown-minutes>--</b><small>دقيقة</small></span>
-        <span class="release-countdown-separator" aria-hidden="true">:</span>
-        <span class="release-countdown-segment"><b data-countdown-seconds>--</b><small>ثانية</small></span>
-      </div>
-      <p class="release-countdown-expired" data-countdown-expired hidden>انتهى الموعد المحدد.</p>
-    </div>
-  </aside>
-
-
   <main id="main">
     <section class="hero section-wrap" id="top" aria-labelledby="hero-title">
       <div class="hero-copy">
@@ -97,18 +72,47 @@
           <a class="button button-quiet" href="mailto:seiferfan077@gmail.com">ابعتلنا <span aria-hidden="true">↗</span></a>
         </div>
         <div class="hero-note"><span class="status-pulse" aria-hidden="true"></span><span><strong>الإصدار الأول:</strong> النسخة المتكاملة بمزايا <bdi>Pro</bdi> و<bdi>VIP</bdi>.</span></div>
+        <a class="video-prompt" href="#hero-video" aria-label="شاهد فيديو مرشد التعريفي">
+          <span class="video-prompt-icon" aria-hidden="true">▶</span>
+          <span class="video-prompt-copy"><strong>اتفرّج على فيديو مرشد</strong><small>هيبدأ تلقائيًا لما يظهر على الشاشة</small></span>
+          <span class="video-prompt-arrow" aria-hidden="true">↓</span>
+        </a>
       </div>
-      <div class="hero-visual hero-video-visual" aria-label="فيديو شرح تطبيق مرشد">
+      <div class="hero-visual hero-video-visual" id="hero-video" aria-label="فيديو مرشد التعريفي">
         <div class="hero-video-frame">
-          <video class="hero-video-player" data-autoplay-video autoplay muted controls playsinline preload="none" width="360" height="640" poster="/assets/video/murshid-walkthrough-poster.jpg" aria-label="فيديو شرح استخدام تطبيق مرشد">
-            <source data-src="/assets/video/murshid-walkthrough.mp4" type="video/mp4">
-            متصفحك مش بيدعم تشغيل الفيديو. <a href="https://drive.google.com/file/d/1DQ7qmZU_w83M7bwabfyhhvNfWEu_Ba82/view?usp=drivesdk">افتحه على Google Drive</a>.
+          <video class="hero-video-player" data-autoplay-video muted controls playsinline preload="none" width="540" height="960" poster="/assets/video/murshid-welcome-poster.jpg" aria-label="فيديو مرشد التعريفي">
+            <source data-src="/assets/video/murshid-welcome-video.mp4" type="video/mp4">
+            متصفحك مش بيدعم تشغيل الفيديو. <a href="https://drive.google.com/file/d/137woR5iBarKixG_re9RfrT5NBaRXS8M6/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">افتحه على Google Drive</a>.
           </video>
         </div>
-        <div class="hero-video-caption"><span class="video-live-dot" aria-hidden="true"></span><span><strong>شرح سريع لمرشد</strong><small>بيبدأ بصوت مكتوم لما يظهر. لو ما اشتغلش دوس تشغيل.</small></span></div>
-        <a class="video-fallback" href="https://drive.google.com/file/d/1DQ7qmZU_w83M7bwabfyhhvNfWEu_Ba82/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">افتح الفيديو على Google Drive <span aria-hidden="true">↗</span></a>
+        <div class="hero-video-caption"><span class="video-live-dot" aria-hidden="true"></span><span><strong>الفيديو التعريفي لمرشد</strong><small>بيبدأ تلقائيًا لما يظهر على الشاشة، بصوت مكتوم. دوس تشغيل لو ما بدأش.</small></span></div>
+        <a class="video-fallback" href="https://drive.google.com/file/d/137woR5iBarKixG_re9RfrT5NBaRXS8M6/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">افتح الفيديو على Google Drive <span aria-hidden="true">↗</span></a>
       </div>
     </section>
+
+    <aside class="release-banner section-wrap" aria-labelledby="release-banner-title">
+      <span class="release-banner-mark" aria-hidden="true">01</span>
+      <div class="release-banner-copy">
+        <div class="release-banner-meta"><span class="release-banner-label">إعلان الإصدار الأول</span><span class="release-banner-window-label">فترة الإطلاق المتوقعة</span></div>
+        <h2 id="release-banner-title">الإصدار الأول الكامل من مرشد</h2>
+        <p>النسخة المنشورة على الموقع هي الإصدار الأول المتكامل، وليست نسخة أولية، وتضم مزايا <bdi>Pro</bdi> و<bdi>VIP</bdi>.</p>
+      </div>
+      <div class="release-banner-date" aria-label="من 25 أكتوبر إلى 3 نوفمبر 2026 بتوقيت القاهرة">
+        <span class="release-banner-date-range"><time datetime="2026-10-25">25 أكتوبر</time><span aria-hidden="true">—</span><time datetime="2026-11-03">3 نوفمبر 2026</time></span>
+        <small>بتوقيت القاهرة</small>
+      </div>
+      <div class="release-countdown" data-release-countdown data-deadline="2026-11-03T23:59:00+02:00" role="timer" aria-label="الوقت المتبقي حتى 3 نوفمبر 2026، الساعة 23:59 بتوقيت القاهرة">
+        <span class="release-countdown-label">الوقت المتبقي حتى نهاية الفترة</span>
+        <div class="release-countdown-clock" data-countdown-clock dir="ltr">
+          <span class="release-countdown-segment"><b data-countdown-hours>--</b><small>ساعة</small></span>
+          <span class="release-countdown-separator" aria-hidden="true">:</span>
+          <span class="release-countdown-segment"><b data-countdown-minutes>--</b><small>دقيقة</small></span>
+          <span class="release-countdown-separator" aria-hidden="true">:</span>
+          <span class="release-countdown-segment"><b data-countdown-seconds>--</b><small>ثانية</small></span>
+        </div>
+        <p class="release-countdown-expired" data-countdown-expired hidden>انتهى الموعد المحدد.</p>
+      </div>
+    </aside>
 
     <section class="trust-strip" aria-label="معلومات سريعة">
       <div class="trust-inner">
@@ -322,6 +326,6 @@
     <div class="footer-bottom section-wrap"><span>© <span id="current-year">2026</span> مرشد — S7</span><span>الموقع الرسمي · التحميل من Google Drive فقط</span></div>
   </footer>
   <script src="/download-config.js" defer></script>
-  <script src="/script.js?v=admin-discovery-20261021" defer></script>
+  <script src="/script.js?v=welcome-video-nav-20261104" defer></script>
 </body>
 </html>

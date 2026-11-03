@@ -1,3 +1,6 @@
+(() => {
+'use strict';
+
 const pageLanguage = document.documentElement.lang.toLowerCase().startsWith('en') ? 'en' : 'ar';
 const messages = {
   ar: {
@@ -406,9 +409,10 @@ function initializeAutoplayVideo() {
   if (!video || !source) return;
 
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  if (reducedMotion) video.removeAttribute('autoplay');
-
   let sourceLoaded = false;
+  let videoIsInView = false;
+  const introIsOpen = () => Boolean(document.querySelector('[data-intro-overlay]'));
+
   const loadAndPlay = () => {
     if (!sourceLoaded) {
       source.src = source.dataset.src || '';
@@ -419,23 +423,40 @@ function initializeAutoplayVideo() {
     if (!reducedMotion) {
       const playback = video.play();
       playback?.catch(() => {
-        // Browser autoplay policies may require the user to press Play.
+        // Autoplay may be blocked by browser settings; the visible controls remain available.
       });
     }
   };
 
+  const playWhenReady = () => {
+    if (!videoIsInView || introIsOpen()) return;
+    loadAndPlay();
+  };
+
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
+    const videoObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];
-      if (entry.isIntersecting) {
-        loadAndPlay();
+      videoIsInView = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.3);
+      if (videoIsInView) {
+        playWhenReady();
       } else if (!video.paused && !video.ended) {
         video.pause();
       }
-    }, { rootMargin: '250px 0px' });
-    observer.observe(video);
+    }, { threshold: [0, 0.3] });
+    videoObserver.observe(video);
   } else {
-    loadAndPlay();
+    videoIsInView = true;
+    playWhenReady();
+  }
+
+  if (introIsOpen() && 'MutationObserver' in window) {
+    const introObserver = new MutationObserver(() => {
+      if (!introIsOpen()) {
+        introObserver.disconnect();
+        playWhenReady();
+      }
+    });
+    introObserver.observe(document.body, { childList: true, subtree: true });
   }
 }
 
@@ -592,3 +613,61 @@ function initializeDeveloperTeamForms() {
 }
 
 initializeDeveloperTeamForms();
+
+function initializeStickyBottomNav() {
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (/\/admin\.html$/i.test(path)) return;
+
+  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
+  const home = isEnglish ? '/en/' : '/';
+  const labels = isEnglish
+    ? { nav: 'Quick navigation', home: 'Home', video: 'Video', features: 'Features', vip: 'VIP', guide: 'Guide' }
+    : { nav: 'التنقل السريع', home: 'الرئيسية', video: 'الفيديو', features: 'المميزات', vip: 'VIP', guide: 'الدليل' };
+  const items = [
+    { key: 'home', icon: '⌂', label: labels.home, href: home + '#top', current: path === '/' || path === '/en' },
+    { key: 'video', icon: '▶', label: labels.video, href: home + '#hero-video', current: false },
+    { key: 'features', icon: '✦', label: labels.features, href: home + '#features', current: false },
+    { key: 'vip', icon: '◇', label: 'VIP', href: isEnglish ? '/en/access.html' : '/access.html', current: path.endsWith('/access.html') },
+    { key: 'guide', icon: '↓', label: labels.guide, href: isEnglish ? '/en/download-guide.html' : '/download-guide.html', current: path.endsWith('/download-guide.html') },
+  ];
+
+  const nav = document.createElement('nav');
+  nav.className = 'sticky-bottom-nav';
+  nav.dataset.skipVerified = '';
+  nav.setAttribute('aria-label', labels.nav);
+  for (const item of items) {
+    const link = document.createElement('a');
+    link.className = 'sticky-bottom-nav-item';
+    link.href = item.href;
+    link.dataset.navKey = item.key;
+    link.setAttribute('aria-label', item.label);
+    if (item.current) link.setAttribute('aria-current', 'page');
+    const icon = document.createElement('span');
+    icon.className = 'sticky-bottom-nav-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = item.icon;
+    const label = document.createElement('span');
+    label.className = 'sticky-bottom-nav-label';
+    label.textContent = item.label;
+    link.append(icon, label);
+    nav.append(link);
+  }
+
+  const introIsOpen = () => Boolean(document.querySelector('[data-intro-overlay]'));
+  nav.inert = introIsOpen();
+  document.body.append(nav);
+  document.body.classList.add('has-sticky-bottom-nav');
+
+  if (nav.inert && 'MutationObserver' in window) {
+    const introObserver = new MutationObserver(() => {
+      if (!introIsOpen()) {
+        nav.inert = false;
+        introObserver.disconnect();
+      }
+    });
+    introObserver.observe(document.body, { childList: true, subtree: true });
+  }
+}
+
+initializeStickyBottomNav();
+})();
