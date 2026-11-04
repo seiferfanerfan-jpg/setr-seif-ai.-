@@ -670,4 +670,32 @@ function initializeStickyBottomNav() {
 }
 
 initializeStickyBottomNav();
+
+function initializeRashidEmbed() {
+  const dialog = document.querySelector('[data-rashid-dialog]');
+  const frame = dialog?.querySelector('[data-rashid-frame]');
+  const closeButton = dialog?.querySelector('[data-rashid-close]');
+  const openers = [...document.querySelectorAll('[data-open-rashid]')];
+  if (!dialog || !frame || !closeButton || !openers.length) return;
+
+  let lastOpener = null;
+  openers.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (typeof dialog.showModal !== 'function') return;
+      event.preventDefault();
+      lastOpener = link;
+      if (!frame.hasAttribute('src')) frame.src = frame.dataset.src;
+      dialog.showModal();
+      closeButton.focus();
+    });
+  });
+
+  closeButton.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => lastOpener?.focus());
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+}
+
+initializeRashidEmbed();
 })();

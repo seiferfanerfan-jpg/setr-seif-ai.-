@@ -535,3 +535,22 @@ body.has-sticky-bottom-nav{padding-bottom:calc(91px + env(safe-area-inset-bottom
 .model-comparison__video video{display:block;width:100%;height:auto;aspect-ratio:9/16;border-radius:14px;background:#000;object-fit:contain}
 .model-comparison__video figcaption{margin:8px 3px 1px;color:#91aab5;font-size:9px;text-align:center}
 @media(max-width:680px){.model-comparison-section{grid-template-columns:1fr;gap:20px;margin-block:12px 0;padding:22px 19px}.model-comparison-section h2{font-size:32px}.model-comparison__intro{font-size:12px}.model-comparison__video{width:min(100%,225px)}}
+
+
+/* Rashed web app embedded viewer */
+.rashid-launch-button{margin-top:19px}
+.rashid-dialog{width:min(1440px,96vw);height:min(94dvh,1080px);max-width:none;max-height:none;margin:auto;padding:0;overflow:hidden;border:1px solid rgba(95,219,203,.26);border-radius:20px;background:#07131f;color:#eaf3f5;box-shadow:0 28px 100px rgba(0,0,0,.58)}
+.rashid-dialog[open]{display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.rashid-dialog::backdrop{background:rgba(2,10,17,.78);backdrop-filter:blur(5px)}
+.rashid-dialog__bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 19px;border-bottom:1px solid rgba(205,231,235,.13);background:#0d2434}
+.rashid-dialog__copy{min-width:0}
+.rashid-dialog__copy h2{margin:0;color:#f1f8fa;font-size:14px;line-height:1.6}
+.rashid-dialog__copy p{margin:2px 0 0;color:#a7bbc4;font-size:10px;line-height:1.7}
+.rashid-dialog__close{flex:0 0 auto;display:inline-flex;align-items:center;gap:9px;padding:8px 12px;border:1px solid rgba(205,231,235,.18);border-radius:999px;background:rgba(255,255,255,.04);color:#eaf3f5;font-size:10px;font-weight:700;cursor:pointer}
+.rashid-dialog__close:hover{border-color:var(--teal);color:var(--teal)}
+.rashid-dialog__close span{font-size:19px;line-height:1}
+.rashid-dialog__frame{display:block;width:100%;height:100%;min-height:0;border:0;background:#f8f8f7}
+.rashid-dialog__fallback{margin:0;padding:7px 14px;color:#9bb0bc;font-size:9px;text-align:center;background:#0d2434}
+.rashid-dialog__fallback a{color:#72e1d2;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:680px){.rashid-dialog{width:100vw;height:100dvh;border:0;border-radius:0}.rashid-dialog__bar{gap:10px;padding:10px 12px}.rashid-dialog__copy h2{font-size:12px}.rashid-dialog__copy p{font-size:9px}.rashid-dialog__close{padding:7px 10px}.rashid-dialog__fallback{padding:6px 10px;font-size:8px}.rashid-launch-button{width:100%;justify-content:space-between}}
+@media(max-width:380px){.rashid-dialog__bar{align-items:flex-start}.rashid-dialog__close{font-size:9px}.rashid-dialog__copy h2{font-size:11px}}
