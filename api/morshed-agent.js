@@ -91,6 +91,8 @@ export async function handleMorshedAgent(request, {
   }
 }
 
-export default async function handler(request) {
-  return handleMorshedAgent(request);
-}
+export default {
+  async fetch(request) {
+    return handleMorshedAgent(request);
+  },
+};
