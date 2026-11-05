@@ -698,4 +698,82 @@ function initializeRashidEmbed() {
 }
 
 initializeRashidEmbed();
+
+function initializeMorshedAgent() {
+  const sections = [...document.querySelectorAll('[data-morshed-agent]')];
+  if (!sections.length) return;
+  const copy = {
+    ar: {
+      empty: 'اكتب مشكلة مرشد اللي قابلتك، وأنا أبدأ معاك.',
+      required: 'اكتب سؤالك الأول عن مرشد.',
+      sending: 'براجع المشكلة…',
+      unavailable: 'مساعد الدعم مش مفعّل على الخادم لسه. تقدر تبعت المشكلة على seiferfan077@gmail.com.',
+      failed: 'حصلت مشكلة مؤقتة. جرّب تاني أو ابعت نص رسالة الخطأ للدعم.',
+    },
+    en: {
+      empty: 'Describe the Murshid problem you’re facing and I’ll help you start.',
+      required: 'Write your first Murshid support question.',
+      sending: 'Reviewing the issue…',
+      unavailable: 'The support assistant is not enabled on the server yet. You can email the issue to seiferfan077@gmail.com.',
+      failed: 'A temporary problem occurred. Try again or email the exact error message to support.',
+    },
+  };
+  sections.forEach((section) => {
+    const language = section.dataset.language === 'en' ? 'en' : 'ar';
+    const text = copy[language];
+    const form = section.querySelector('[data-agent-form]');
+    const log = section.querySelector('[data-agent-log]');
+    const empty = section.querySelector('[data-agent-empty]');
+    const input = section.querySelector('[data-agent-input]');
+    const submit = section.querySelector('[data-agent-submit]');
+    const status = section.querySelector('[data-agent-status]');
+    if (!form || !log || !input || !submit || !status) return;
+    const messages = [];
+    const addMessage = (role, content) => {
+      empty?.remove();
+      const item = document.createElement('p');
+      item.className = `morshed-agent-message morshed-agent-message--${role}`;
+      item.textContent = content;
+      log.append(item);
+      log.scrollTop = log.scrollHeight;
+    };
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const content = input.value.trim();
+      if (!content) { status.textContent = text.required; return; }
+      if (content.length > 2000) return;
+      messages.push({ role: 'user', content });
+      addMessage('user', content);
+      input.value = '';
+      submit.disabled = true;
+      status.textContent = text.sending;
+      try {
+        const response = await fetch('/api/morshed-agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ messages }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          if (response.status === 503) throw new Error('unavailable');
+          throw new Error('failed');
+        }
+        const reply = String(result.content || '').trim();
+        if (!reply) throw new Error('failed');
+        messages.push({ role: 'assistant', content: reply });
+        addMessage('assistant', reply);
+        status.textContent = '';
+      } catch (error) {
+        status.textContent = error.message === 'unavailable' ? text.unavailable : text.failed;
+        messages.pop();
+      } finally {
+        submit.disabled = false;
+        input.focus();
+      }
+    });
+  });
+}
+
+initializeMorshedAgent();
 })();
